@@ -22,7 +22,12 @@ namespace System.Reactive
             _cancel = cancel;
         }
 
-        public virtual void Dispose()
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             _observer = NopObserver<TSource>.Instance;
 
