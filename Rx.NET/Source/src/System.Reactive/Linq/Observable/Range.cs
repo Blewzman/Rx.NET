@@ -53,27 +53,24 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 while (!cancel.IsDisposed && i < _count)
                 {
-                    base._observer.OnNext(_start + i);
+                    base.ForwardOnNext(_start + i);
                     i++;
                 }
 
                 if (!cancel.IsDisposed)
-                    base._observer.OnCompleted();
-
-                base.Dispose();
+                    base.ForwardOnCompleted();
             }
 
             private void LoopRec(int i, Action<int> recurse)
             {
                 if (i < _count)
                 {
-                    base._observer.OnNext(_start + i);
+                    base.ForwardOnNext(_start + i);
                     recurse(i + 1);
                 }
                 else
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                 }
             }
         }

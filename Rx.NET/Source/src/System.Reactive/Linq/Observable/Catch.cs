@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                base._observer.OnNext(value);
+                base.ForwardOnNext(value);
             }
 
             private Exception _lastException;
@@ -50,18 +50,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
 
             protected override void Done()
             {
                 if (_lastException != null)
-                    base._observer.OnError(_lastException);
+                    base.ForwardOnError(_lastException);
                 else
-                    base._observer.OnCompleted();
-
-                base.Dispose();
+                    base.ForwardOnCompleted();
             }
 
             protected override bool Fail(Exception error)
@@ -117,7 +114,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnNext(TSource value)
             {
-                base._observer.OnNext(value);
+                base.ForwardOnNext(value);
             }
 
             public void OnError(Exception error)
@@ -131,8 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        base.ForwardOnError(ex);
                         return;
                     }
 
@@ -142,15 +138,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 else
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
             }
 
             public void OnCompleted()
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
 
             private sealed class HandlerObserver : IObserver<TSource>
@@ -164,19 +158,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TSource value)
                 {
-                    _parent._observer.OnNext(value);
+                    _parent.ForwardOnNext(value);
                 }
 
                 public void OnError(Exception error)
                 {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    _parent.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
-                    _parent._observer.OnCompleted();
-                    _parent.Dispose();
+                    _parent.ForwardOnCompleted();
                 }
             }
         }

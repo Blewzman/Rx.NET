@@ -38,8 +38,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void Invoke()
             {
-                base._observer.OnError(_exception);
-                base.Dispose();
+                base.ForwardOnError(_exception);
             }
         }
     }

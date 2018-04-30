@@ -138,7 +138,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     lock (base._observer)
-                        base._observer.OnNext(group);
+                        base.ForwardOnNext(group);
 
                     var md = new SingleAssignmentDisposable();
                     _groupDisposable.Add(md);
@@ -250,9 +250,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     w.OnCompleted();
 
                 lock (base._observer)
-                    base._observer.OnCompleted();
-
-                base.Dispose();
+                    base.ForwardOnCompleted();
             }
 
             private void Error(Exception exception)
@@ -272,9 +270,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     w.OnError(exception);
 
                 lock (base._observer)
-                    base._observer.OnError(exception);
-
-                base.Dispose();
+                    base.ForwardOnError(exception);
             }
         }
     }

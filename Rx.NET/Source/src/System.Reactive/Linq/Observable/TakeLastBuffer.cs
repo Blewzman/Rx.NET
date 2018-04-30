@@ -45,8 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -55,9 +54,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     while (_queue.Count > 0)
                         res.Add(_queue.Dequeue());
 
-                    base._observer.OnNext(res);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(res);
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -109,8 +107,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -122,9 +119,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     while (_queue.Count > 0)
                         res.Add(_queue.Dequeue().Value);
 
-                    base._observer.OnNext(res);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(res);
+                    base.ForwardOnCompleted();
                 }
 
                 private void Trim(TimeSpan now)

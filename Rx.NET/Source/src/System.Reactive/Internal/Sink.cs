@@ -34,6 +34,23 @@ namespace System.Reactive
             Interlocked.Exchange(ref _cancel, null)?.Dispose();
         }
 
+        protected void ForwardOnNext(TSource value)
+        {
+            _observer.OnNext(value);
+        }
+
+        protected void ForwardOnCompleted()
+        {
+            _observer.OnCompleted();
+            Dispose();
+        }
+
+        protected void ForwardOnError(Exception error)
+        {
+            _observer.OnError(error);
+            Dispose();
+        }
+
         public IObserver<TSource> GetForwarder() => new _(this);
 
         private sealed class _ : IObserver<TSource>
@@ -47,19 +64,17 @@ namespace System.Reactive
 
             public void OnNext(TSource value)
             {
-                _forward._observer.OnNext(value);
+                _forward.ForwardOnNext(value);
             }
 
             public void OnError(Exception error)
             {
-                _forward._observer.OnError(error);
-                _forward.Dispose();
+                _forward.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                _forward._observer.OnCompleted();
-                _forward.Dispose();
+                _forward.ForwardOnCompleted();
             }
         }
     }

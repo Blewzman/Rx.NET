@@ -34,15 +34,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -77,15 +75,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext((float)_sum); // This is what LINQ to Objects does!
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -120,15 +116,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -167,22 +161,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -221,22 +212,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -272,15 +260,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -316,15 +302,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext((float)_sum); // This is what LINQ to Objects does!
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -360,15 +344,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -408,22 +390,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -463,22 +442,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_sum);
+                base.ForwardOnCompleted();
             }
         }
     }

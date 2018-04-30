@@ -126,7 +126,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (fireNewMapEntry)
                 {
                     var group = new GroupedObservable<TKey, TElement>(key, writer, _refCountDisposable);
-                    _observer.OnNext(group);
+                    ForwardOnNext(group);
                 }
 
                 var element = default(TElement);
@@ -155,8 +155,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 foreach (var w in _map.Values)
                     w.OnCompleted();
 
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
 
             private void Error(Exception exception)
@@ -166,8 +165,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 foreach (var w in _map.Values)
                     w.OnError(exception);
 
-                base._observer.OnError(exception);
-                base.Dispose();
+                base.ForwardOnError(exception);
             }
         }
     }

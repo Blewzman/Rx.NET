@@ -40,19 +40,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _queue.Enqueue(value);
                     if (_queue.Count > _count)
-                        base._observer.OnNext(_queue.Dequeue());
+                        base.ForwardOnNext(_queue.Dequeue());
                 }
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -100,23 +98,21 @@ namespace System.Reactive.Linq.ObservableImpl
                     var now = _watch.Elapsed;
                     _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, now));
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
-                        base._observer.OnNext(_queue.Dequeue().Value);
+                        base.ForwardOnNext(_queue.Dequeue().Value);
                 }
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     var now = _watch.Elapsed;
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
-                        base._observer.OnNext(_queue.Dequeue().Value);
+                        base.ForwardOnNext(_queue.Dequeue().Value);
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                 }
             }
         }

@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _n = 0;
 
                     var firstWindow = CreateWindow();
-                    base._observer.OnNext(firstWindow);
+                    base.ForwardOnNext(firstWindow);
 
                     _m.Disposable = source.SubscribeSafe(this);
 
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_n % _skip == 0)
                     {
                         var newWindow = CreateWindow();
-                        base._observer.OnNext(newWindow);
+                        base.ForwardOnNext(newWindow);
                     }
                 }
 
@@ -92,8 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     while (_queue.Count > 0)
                         _queue.Dequeue().OnError(error);
 
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -101,8 +100,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     while (_queue.Count > 0)
                         _queue.Dequeue().OnCompleted();
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -168,7 +166,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var s = new Subject<TSource>();
                     _q.Enqueue(s);
-                    base._observer.OnNext(new WindowObservable<TSource>(s, _refCountDisposable));
+                    base.ForwardOnNext(new WindowObservable<TSource>(s, _refCountDisposable));
                 }
 
                 private void CreateTimer()
@@ -249,8 +247,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         foreach (var s in _q)
                             s.OnError(error);
 
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -261,8 +258,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         foreach (var s in _q)
                             s.OnCompleted();
 
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -322,7 +318,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void CreateWindow()
                 {
                     _subject = new Subject<TSource>();
-                    base._observer.OnNext(new WindowObservable<TSource>(_subject, _refCountDisposable));
+                    base.ForwardOnNext(new WindowObservable<TSource>(_subject, _refCountDisposable));
                 }
 
                 public void OnNext(TSource value)
@@ -339,8 +335,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         _subject.OnError(error);
 
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -350,8 +345,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         _subject.OnCompleted();
 
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -406,7 +400,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _refCountDisposable = new RefCountDisposable(groupDisposable);
 
                     _s = new Subject<TSource>();
-                    base._observer.OnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
+                    base.ForwardOnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
                     CreateTimer(_s);
 
                     groupDisposable.Add(source.SubscribeSafe(this));
@@ -437,7 +431,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         _s.OnCompleted();
                         _s = newWindow;
-                        base._observer.OnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
+                        base.ForwardOnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
                     }
 
                     CreateTimer(newWindow);
@@ -461,7 +455,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             _s.OnCompleted();
                             _s = newWindow;
-                            base._observer.OnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
+                            base.ForwardOnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
                         }
                     }
 
@@ -474,8 +468,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _s.OnError(error);
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -484,8 +477,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _s.OnCompleted();
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -534,7 +526,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _refCountDisposable = new RefCountDisposable(groupDisposable);
 
                     var window = new WindowObservable<TSource>(_window, _refCountDisposable);
-                    base._observer.OnNext(window);
+                    base.ForwardOnNext(window);
 
                     groupDisposable.Add(source.SubscribeSafe(this));
 
@@ -554,8 +546,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_gate)
                         {
-                            base._observer.OnError(exception);
-                            base.Dispose();
+                            base.ForwardOnError(exception);
                         }
                         return;
                     }
@@ -575,7 +566,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _window = new Subject<TSource>();
 
                         var window = new WindowObservable<TSource>(_window, _refCountDisposable);
-                        base._observer.OnNext(window);
+                        base.ForwardOnNext(window);
                     }
 
                     _windowGate.Wait(CreateWindowClose);
@@ -621,8 +612,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _window.OnError(error);
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -631,8 +621,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _window.OnCompleted();
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -676,7 +665,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _refCountDisposable = new RefCountDisposable(d);
 
                     var window = new WindowObservable<TSource>(_window, _refCountDisposable);
-                    base._observer.OnNext(window);
+                    base.ForwardOnNext(window);
 
                     d.Add(parent._source.SubscribeSafe(this));
                     d.Add(parent._windowBoundaries.SubscribeSafe(new WindowClosingObserver(this)));
@@ -701,7 +690,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent._window = new Subject<TSource>();
 
                             var window = new WindowObservable<TSource>(_parent._window, _parent._refCountDisposable);
-                            _parent._observer.OnNext(window);
+                            _parent.ForwardOnNext(window);
                         }
                     }
 
@@ -729,8 +718,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _window.OnError(error);
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -739,8 +727,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _window.OnCompleted();
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }

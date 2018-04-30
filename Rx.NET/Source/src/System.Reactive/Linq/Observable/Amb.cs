@@ -87,7 +87,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_parent._choice == _me)
                         {
-                            _parent._observer.OnNext(value);
+                            _parent.ForwardOnNext(value);
                         }
                     }
                 }
@@ -106,8 +106,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_parent._choice == _me)
                         {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
+                            _parent.ForwardOnError(error);
                         }
                     }
                 }
@@ -126,8 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_parent._choice == _me)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
+                            _parent.ForwardOnCompleted();
                         }
                     }
                 }

@@ -39,8 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                     return Disposable.Empty;
                 }
 
@@ -107,8 +106,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     state.enumerator.Dispose();
 
-                    base._observer.OnError(ex);
-                    base.Dispose();
+                    base.ForwardOnError(ex);
                     return;
                 }
 
@@ -116,12 +114,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     state.enumerator.Dispose();
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                     return;
                 }
 
-                base._observer.OnNext(current);
+                base.ForwardOnNext(current);
                 recurse(state);
             }
 
@@ -146,17 +143,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (ex != null)
                     {
-                        base._observer.OnError(ex);
+                        base.ForwardOnError(ex);
                         break;
                     }
 
                     if (!hasNext)
                     {
-                        base._observer.OnCompleted();
+                        base.ForwardOnCompleted();
                         break;
                     }
 
-                    base._observer.OnNext(current);
+                    base.ForwardOnNext(current);
                 }
 
                 enumerator.Dispose();

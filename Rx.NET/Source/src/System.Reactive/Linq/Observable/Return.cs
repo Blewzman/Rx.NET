@@ -38,9 +38,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void Invoke()
             {
-                base._observer.OnNext(_value);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_value);
+                base.ForwardOnCompleted();
             }
         }
     }

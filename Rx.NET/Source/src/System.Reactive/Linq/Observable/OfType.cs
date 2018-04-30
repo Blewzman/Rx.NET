@@ -28,20 +28,18 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (value is TResult)
                 {
-                    base._observer.OnNext((TResult)(object)value);
+                    base.ForwardOnNext((TResult)(object)value);
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
         }
     }

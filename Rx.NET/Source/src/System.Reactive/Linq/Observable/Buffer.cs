@@ -67,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var s = _queue.Dequeue();
                         if (s.Count > 0)
-                            base._observer.OnNext(s);
+                            base.ForwardOnNext(s);
                     }
 
                     _n++;
@@ -80,8 +80,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     while (_queue.Count > 0)
                         _queue.Dequeue().Clear();
 
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -90,11 +89,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var s = _queue.Dequeue();
                         if (s.Count > 0)
-                            base._observer.OnNext(s);
+                            base.ForwardOnNext(s);
                     }
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -207,7 +205,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (state.isSpan)
                         {
                             var s = _q.Dequeue();
-                            base._observer.OnNext(s);
+                            base.ForwardOnNext(s);
                         }
 
                         if (state.isShift)
@@ -237,8 +235,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         while (_q.Count > 0)
                             _q.Dequeue().Clear();
 
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -247,10 +244,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         while (_q.Count > 0)
-                            base._observer.OnNext(_q.Dequeue());
+                            base.ForwardOnNext(_q.Dequeue());
 
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -299,7 +295,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_list);
+                        base.ForwardOnNext(_list);
                         _list = new List<TSource>();
                     }
                 }
@@ -318,8 +314,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         _list.Clear();
 
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -327,9 +322,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_list);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnNext(_list);
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -407,7 +401,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         var res = _s;
                         _s = new List<TSource>();
-                        base._observer.OnNext(res);
+                        base.ForwardOnNext(res);
 
                         CreateTimer(newId);
                     }
@@ -433,7 +427,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             var res = _s;
                             _s = new List<TSource>();
-                            base._observer.OnNext(res);
+                            base.ForwardOnNext(res);
                         }
 
                         if (newWindow)
@@ -446,8 +440,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _s.Clear();
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -455,9 +448,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_s);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnNext(_s);
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -519,8 +511,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_gate)
                         {
-                            base._observer.OnError(exception);
-                            base.Dispose();
+                            base.ForwardOnError(exception);
                         }
                         return;
                     }
@@ -538,7 +529,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var res = _buffer;
                         _buffer = new List<TSource>();
-                        base._observer.OnNext(res);
+                        base.ForwardOnNext(res);
                     }
 
                     _bufferGate.Wait(CreateBufferClose);
@@ -584,8 +575,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _buffer.Clear();
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -593,9 +583,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_buffer);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnNext(_buffer);
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -652,7 +641,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             var res = _parent._buffer;
                             _parent._buffer = new List<TSource>();
-                            _parent._observer.OnNext(res);
+                            _parent.ForwardOnNext(res);
                         }
                     }
 
@@ -680,8 +669,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _buffer.Clear();
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -689,9 +677,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_buffer);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnNext(_buffer);
+                        base.ForwardOnCompleted();
                     }
                 }
             }
