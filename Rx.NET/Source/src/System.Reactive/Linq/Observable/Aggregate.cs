@@ -48,30 +48,26 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        base.ForwardOnError(exception);
                     }
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
                 if (!_hasAccumulation)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
-                    base.Dispose();
+                    base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_accumulation);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(_accumulation);
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -114,22 +110,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_accumulation);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_accumulation);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -177,15 +170,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
@@ -197,14 +188,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                     return;
                 }
 
-                base._observer.OnNext(result);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(result);
+                base.ForwardOnCompleted();
             }
         }
     }

@@ -54,26 +54,23 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_remaining > 0)
                     {
                         --_remaining;
-                        base._observer.OnNext(value);
+                        base.ForwardOnNext(value);
 
                         if (_remaining == 0)
                         {
-                            base._observer.OnCompleted();
-                            base.Dispose();
+                            base.ForwardOnCompleted();
                         }
                     }
                 }
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -134,8 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
 
@@ -143,7 +139,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(value);
+                        base.ForwardOnNext(value);
                     }
                 }
 
@@ -151,8 +147,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -160,8 +155,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }

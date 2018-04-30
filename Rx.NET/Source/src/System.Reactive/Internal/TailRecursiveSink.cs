@@ -82,8 +82,7 @@ namespace System.Reactive
                     // enumerating to find the next observable sequence. Therefore,
                     // we feed those errors directly to the observer.
                     //
-                    _observer.OnError(ex);
-                    base.Dispose();
+                    ForwardOnError(ex);
                     return;
                 }
 
@@ -188,8 +187,7 @@ namespace System.Reactive
                 // enumerating to find the next observable sequence. Therefore,
                 // we feed those errors directly to the observer.
                 //
-                _observer.OnError(exception);
-                base.Dispose();
+                ForwardOnError(exception);
 
                 result = null;
                 return false;
@@ -202,14 +200,12 @@ namespace System.Reactive
 
         protected virtual void Done()
         {
-            _observer.OnCompleted();
-            base.Dispose();
+            ForwardOnCompleted();
         }
 
         protected virtual bool Fail(Exception error)
         {
-            _observer.OnError(error);
-            base.Dispose();
+            ForwardOnError(error);
 
             return false;
         }

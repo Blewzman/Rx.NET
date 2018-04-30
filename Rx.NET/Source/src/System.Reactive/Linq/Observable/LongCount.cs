@@ -40,22 +40,19 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        base.ForwardOnError(ex);
                     }
                 }
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
-                    base._observer.OnNext(_count);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(_count);
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -101,22 +98,19 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        base.ForwardOnError(ex);
                     }
                 }
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
-                    base._observer.OnNext(_count);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(_count);
+                    base.ForwardOnCompleted();
                 }
             }
         }

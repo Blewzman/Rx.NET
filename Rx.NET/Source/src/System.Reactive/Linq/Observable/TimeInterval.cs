@@ -44,19 +44,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 var now = _watch.Elapsed;
                 var span = now.Subtract(_last);
                 _last = now;
-                base._observer.OnNext(new System.Reactive.TimeInterval<TSource>(value, span));
+                base.ForwardOnNext(new System.Reactive.TimeInterval<TSource>(value, span));
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnCompleted();
-                Dispose();
+                base.ForwardOnCompleted();
             }
         }
     }

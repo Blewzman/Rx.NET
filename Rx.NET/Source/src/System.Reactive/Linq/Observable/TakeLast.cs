@@ -63,8 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -82,13 +81,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_queue.Count > 0)
                     {
-                        base._observer.OnNext(_queue.Dequeue());
+                        base.ForwardOnNext(_queue.Dequeue());
                         recurse();
                     }
                     else
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
 
@@ -100,11 +98,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (n == 0)
                         {
-                            base._observer.OnCompleted();
+                            base.ForwardOnCompleted();
                             break;
                         }
                         else
-                            base._observer.OnNext(_queue.Dequeue());
+                            base.ForwardOnNext(_queue.Dequeue());
 
                         n--;
                     }
@@ -171,8 +169,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -193,13 +190,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_queue.Count > 0)
                     {
-                        base._observer.OnNext(_queue.Dequeue().Value);
+                        base.ForwardOnNext(_queue.Dequeue().Value);
                         recurse();
                     }
                     else
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
 
@@ -211,11 +207,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (n == 0)
                         {
-                            base._observer.OnCompleted();
+                            base.ForwardOnCompleted();
                             break;
                         }
                         else
-                            base._observer.OnNext(_queue.Dequeue().Value);
+                            base.ForwardOnNext(_queue.Dequeue().Value);
 
                         n--;
                     }

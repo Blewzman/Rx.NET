@@ -80,22 +80,19 @@ namespace System.Reactive.Linq.ObservableImpl
                                 }
                                 catch (Exception exception)
                                 {
-                                    _parent._observer.OnError(exception);
-                                    _parent.Dispose();
+                                    _parent.ForwardOnError(exception);
                                     return;
                                 }
                                 if (!equal)
                                 {
-                                    _parent._observer.OnNext(false);
-                                    _parent._observer.OnCompleted();
-                                    _parent.Dispose();
+                                    _parent.ForwardOnNext(false);
+                                    _parent.ForwardOnCompleted();
                                 }
                             }
                             else if (_parent._doner)
                             {
-                                _parent._observer.OnNext(false);
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
+                                _parent.ForwardOnNext(false);
+                                _parent.ForwardOnCompleted();
                             }
                             else
                                 _parent._ql.Enqueue(value);
@@ -106,8 +103,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
+                            _parent.ForwardOnError(error);
                         }
                     }
 
@@ -120,15 +116,13 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 if (_parent._qr.Count > 0)
                                 {
-                                    _parent._observer.OnNext(false);
-                                    _parent._observer.OnCompleted();
-                                    _parent.Dispose();
+                                    _parent.ForwardOnNext(false);
+                                    _parent.ForwardOnCompleted();
                                 }
                                 else if (_parent._doner)
                                 {
-                                    _parent._observer.OnNext(true);
-                                    _parent._observer.OnCompleted();
-                                    _parent.Dispose();
+                                    _parent.ForwardOnNext(true);
+                                    _parent.ForwardOnCompleted();
                                 }
                             }
                         }
@@ -158,22 +152,19 @@ namespace System.Reactive.Linq.ObservableImpl
                                 }
                                 catch (Exception exception)
                                 {
-                                    _parent._observer.OnError(exception);
-                                    _parent.Dispose();
+                                    _parent.ForwardOnError(exception);
                                     return;
                                 }
                                 if (!equal)
                                 {
-                                    _parent._observer.OnNext(false);
-                                    _parent._observer.OnCompleted();
-                                    _parent.Dispose();
+                                    _parent.ForwardOnNext(false);
+                                    _parent.ForwardOnCompleted();
                                 }
                             }
                             else if (_parent._donel)
                             {
-                                _parent._observer.OnNext(false);
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
+                                _parent.ForwardOnNext(false);
+                                _parent.ForwardOnCompleted();
                             }
                             else
                                 _parent._qr.Enqueue(value);
@@ -184,8 +175,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
+                            _parent.ForwardOnError(error);
                         }
                     }
 
@@ -198,15 +188,13 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 if (_parent._ql.Count > 0)
                                 {
-                                    _parent._observer.OnNext(false);
-                                    _parent._observer.OnCompleted();
-                                    _parent.Dispose();
+                                    _parent.ForwardOnNext(false);
+                                    _parent.ForwardOnCompleted();
                                 }
                                 else if (_parent._donel)
                                 {
-                                    _parent._observer.OnNext(true);
-                                    _parent._observer.OnCompleted();
-                                    _parent.Dispose();
+                                    _parent.ForwardOnNext(true);
+                                    _parent.ForwardOnCompleted();
                                 }
                             }
                         }
@@ -259,8 +247,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        base.ForwardOnError(exception);
                         return Disposable.Empty;
                     }
 
@@ -284,23 +271,20 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        base.ForwardOnError(exception);
                         return;
                     }
 
                     if (!equal)
                     {
-                        base._observer.OnNext(false);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnNext(false);
+                        base.ForwardOnCompleted();
                     }
                 }
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -313,14 +297,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        base.ForwardOnError(exception);
                         return;
                     }
 
-                    base._observer.OnNext(!hasNext);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(!hasNext);
+                    base.ForwardOnCompleted();
                 }
             }
         }

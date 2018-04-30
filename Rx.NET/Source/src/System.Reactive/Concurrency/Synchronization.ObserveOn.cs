@@ -86,19 +86,17 @@ namespace System.Reactive.Concurrency
 
                 private void OnNextPosted(object value)
                 {
-                    _observer.OnNext((TSource)value);
+                    ForwardOnNext((TSource)value);
                 }
 
                 private void OnErrorPosted(object error)
                 {
-                    _observer.OnError((Exception)error);
-                    Dispose();
+                    ForwardOnError((Exception)error);
                 }
 
                 private void OnCompletedPosted(object ignored)
                 {
-                    _observer.OnCompleted();
-                    Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

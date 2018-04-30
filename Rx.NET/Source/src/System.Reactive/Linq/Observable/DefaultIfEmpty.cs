@@ -34,21 +34,19 @@ namespace System.Reactive.Linq.ObservableImpl
             public void OnNext(TSource value)
             {
                 _found = true;
-                base._observer.OnNext(value);
+                base.ForwardOnNext(value);
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
                 if (!_found)
-                    base._observer.OnNext(_defaultValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                    base.ForwardOnNext(_defaultValue);
+                base.ForwardOnCompleted();
             }
         }
     }

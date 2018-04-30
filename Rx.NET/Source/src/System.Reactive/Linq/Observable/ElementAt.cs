@@ -33,9 +33,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (_i == 0)
                 {
-                    base._observer.OnNext(value);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(value);
+                    base.ForwardOnCompleted();
                 }
 
                 _i--;
@@ -43,14 +42,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnError(new ArgumentOutOfRangeException("index"));
-                base.Dispose();
+                base.ForwardOnError(new ArgumentOutOfRangeException("index"));
             }
         }
     }

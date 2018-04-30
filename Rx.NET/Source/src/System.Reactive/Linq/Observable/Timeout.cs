@@ -101,7 +101,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onNextWins)
                     {
-                        base._observer.OnNext(value);
+                        base.ForwardOnNext(value);
                         CreateTimer();
                     }
                 }
@@ -121,8 +121,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onErrorWins)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -141,8 +140,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onCompletedWins)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -216,7 +214,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         if (!_switched)
-                            base._observer.OnNext(value);
+                            base.ForwardOnNext(value);
                     }
                 }
 
@@ -232,8 +230,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onErrorWins)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -249,8 +246,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onCompletedWins)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -315,7 +311,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (ObserverWins())
                 {
-                    base._observer.OnNext(value);
+                    base.ForwardOnNext(value);
 
                     var timeout = default(IObservable<TTimeout>);
                     try
@@ -324,8 +320,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception error)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                         return;
                     }
 
@@ -337,8 +332,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (ObserverWins())
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
             }
 
@@ -346,8 +340,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (ObserverWins())
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
                 }
             }
 
@@ -385,8 +378,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (TimerWins())
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 

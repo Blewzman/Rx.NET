@@ -124,8 +124,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (shouldRun)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -234,20 +233,18 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (hasValue)
                         {
-                            base._observer.OnNext(value);
+                            base.ForwardOnNext(value);
                             shouldYield = true;
                         }
                         else
                         {
                             if (hasCompleted)
                             {
-                                base._observer.OnCompleted();
-                                base.Dispose();
+                                base.ForwardOnCompleted();
                             }
                             else if (hasFailed)
                             {
-                                base._observer.OnError(error);
-                                base.Dispose();
+                                base.ForwardOnError(error);
                             }
                             else if (shouldRecurse)
                             {
@@ -435,19 +432,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (hasValue)
                         {
-                            base._observer.OnNext(value);
+                            base.ForwardOnNext(value);
                         }
                         else
                         {
                             if (hasCompleted)
                             {
-                                base._observer.OnCompleted();
-                                base.Dispose();
+                                base.ForwardOnCompleted();
                             }
                             else if (hasFailed)
                             {
-                                base._observer.OnError(error);
-                                base.Dispose();
+                                base.ForwardOnError(error);
                             }
 
                             return;
@@ -649,8 +644,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_gate)
                         {
-                            base._observer.OnError(error);
-                            base.Dispose();
+                            base.ForwardOnError(error);
                         }
 
                         return;
@@ -665,8 +659,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
                 }
 
@@ -685,8 +678,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_atEnd && _delays.Count == 0)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
 
@@ -707,7 +699,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                             _parent._delays.Remove(_self);
                             _parent.CheckDone();
@@ -718,8 +710,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
+                            _parent.ForwardOnError(error);
                         }
                     }
 
@@ -727,7 +718,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                             _parent._delays.Remove(_self);
                             _parent.CheckDone();
@@ -814,8 +805,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public void OnError(Exception error)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
 
                     public void OnCompleted()

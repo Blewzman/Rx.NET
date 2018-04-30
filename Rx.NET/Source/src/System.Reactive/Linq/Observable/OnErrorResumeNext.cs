@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                base._observer.OnNext(value);
+                base.ForwardOnNext(value);
             }
 
             public override void OnError(Exception error)

@@ -33,19 +33,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnNext(TSource value)
             {
-                base._observer.OnNext(new Timestamped<TSource>(value, _scheduler.Now));
+                base.ForwardOnNext(new Timestamped<TSource>(value, _scheduler.Now));
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
         }
     }

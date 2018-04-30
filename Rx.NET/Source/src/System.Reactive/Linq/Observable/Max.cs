@@ -60,8 +60,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        base.ForwardOnError(ex);
                         return;
                     }
 
@@ -79,23 +78,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public override void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    base.ForwardOnNext(_lastValue);
+                    base.ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
 
@@ -127,8 +123,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         catch (Exception ex)
                         {
-                            base._observer.OnError(ex);
-                            base.Dispose();
+                            base.ForwardOnError(ex);
                             return;
                         }
 
@@ -142,15 +137,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public override void OnCompleted()
             {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_lastValue);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -198,23 +191,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    base.ForwardOnNext(_lastValue);
+                    base.ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -262,23 +252,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    base.ForwardOnNext(_lastValue);
+                    base.ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -326,23 +313,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    base.ForwardOnNext(_lastValue);
+                    base.ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -390,23 +374,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    base.ForwardOnNext(_lastValue);
+                    base.ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -454,23 +435,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    base.ForwardOnNext(_lastValue);
+                    base.ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -518,15 +496,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_lastValue);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -574,15 +550,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_lastValue);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -630,15 +604,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_lastValue);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -686,15 +658,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_lastValue);
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -742,15 +712,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(_lastValue);
+                base.ForwardOnCompleted();
             }
         }
     }

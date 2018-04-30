@@ -65,9 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public void OnError(Exception error)
             {
                 lock (_gate)
-                    base._observer.OnError(error);
-
-                base.Dispose();
+                    base.ForwardOnError(error);
             }
 
             public void OnCompleted()
@@ -79,8 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _isStopped = true;
                     if (!_hasLatest)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -104,7 +101,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (_parent._latest == _id)
                         {
-                            _parent._observer.OnNext(value);
+                            _parent.ForwardOnNext(value);
                         }
                     }
                 }
@@ -117,8 +114,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_parent._latest == _id)
                         {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
+                            _parent.ForwardOnError(error);
                         }
                     }
                 }
@@ -135,8 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             if (_parent._isStopped)
                             {
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
+                                _parent.ForwardOnCompleted();
                             }
                         }
                     }

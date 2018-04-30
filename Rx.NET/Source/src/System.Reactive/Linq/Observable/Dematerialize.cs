@@ -29,29 +29,25 @@ namespace System.Reactive.Linq.ObservableImpl
                 switch (value.Kind)
                 {
                     case NotificationKind.OnNext:
-                        base._observer.OnNext(value.Value);
+                        base.ForwardOnNext(value.Value);
                         break;
                     case NotificationKind.OnError:
-                        base._observer.OnError(value.Exception);
-                        base.Dispose();
+                        base.ForwardOnError(value.Exception);
                         break;
                     case NotificationKind.OnCompleted:
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                         break;
                 }
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
         }
     }

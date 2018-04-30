@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
             {
                 lock (_gate)
                 {
-                    _observer.OnNext(value);
+                    ForwardOnNext(value);
                 }
             }
 
@@ -49,8 +49,7 @@ namespace System.Reactive.Concurrency
             {
                 lock (_gate)
                 {
-                    _observer.OnError(error);
-                    Dispose();
+                    ForwardOnError(error);
                 }
             }
 
@@ -58,8 +57,7 @@ namespace System.Reactive.Concurrency
             {
                 lock (_gate)
                 {
-                    _observer.OnCompleted();
-                    Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

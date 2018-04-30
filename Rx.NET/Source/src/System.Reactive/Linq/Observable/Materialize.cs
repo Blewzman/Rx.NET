@@ -28,21 +28,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnNext(TSource value)
             {
-                base._observer.OnNext(Notification.CreateOnNext<TSource>(value));
+                base.ForwardOnNext(Notification.CreateOnNext<TSource>(value));
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnNext(Notification.CreateOnError<TSource>(error));
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(Notification.CreateOnError<TSource>(error));
+                base.ForwardOnCompleted();
             }
 
             public void OnCompleted()
             {
-                base._observer.OnNext(Notification.CreateOnCompleted<TSource>());
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnNext(Notification.CreateOnCompleted<TSource>());
+                base.ForwardOnCompleted();
             }
         }
     }

@@ -87,14 +87,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         catch (Exception exception)
                         {
-                            base._observer.OnError(exception);
-                            base.Dispose();
+                            base.ForwardOnError(exception);
                             return;
                         }
 
                         if (hasResult)
                         {
-                            base._observer.OnNext(result);
+                            base.ForwardOnNext(result);
                         }
                         else
                         {
@@ -104,10 +103,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (!cancel.IsDisposed)
                     {
-                        base._observer.OnCompleted();
+                        base.ForwardOnCompleted();
                     }
-
-                    base.Dispose();
                 }
 
                 private void LoopRec(Action recurse)
@@ -134,20 +131,18 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        base.ForwardOnError(exception);
                         return;
                     }
 
                     if (hasResult)
                     {
-                        base._observer.OnNext(result);
+                        base.ForwardOnNext(result);
                         recurse();
                     }
                     else
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                     }
                 }
             }
@@ -207,7 +202,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (_hasResult)
                     {
-                        base._observer.OnNext(_result);
+                        base.ForwardOnNext(_result);
                     }
 
                     try
@@ -231,15 +226,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        base.ForwardOnError(exception);
                         return Disposable.Empty;
                     }
 
                     if (!_hasResult)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                         return Disposable.Empty;
                     }
 
@@ -302,7 +295,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (_hasResult)
                     {
-                        base._observer.OnNext(_result);
+                        base.ForwardOnNext(_result);
                     }
 
                     try
@@ -326,15 +319,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        base.ForwardOnError(exception);
                         return Disposable.Empty;
                     }
 
                     if (!_hasResult)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        base.ForwardOnCompleted();
                         return Disposable.Empty;
                     }
 

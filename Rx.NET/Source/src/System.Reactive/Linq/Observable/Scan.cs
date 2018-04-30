@@ -41,24 +41,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                     return;
                 }
 
-                base._observer.OnNext(_accumulation);
+                base.ForwardOnNext(_accumulation);
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
         }
     }
@@ -108,24 +105,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    base.ForwardOnError(exception);
                     return;
                 }
 
-                base._observer.OnNext(_accumulation);
+                base.ForwardOnNext(_accumulation);
             }
 
             public void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                base.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                base.ForwardOnCompleted();
             }
         }
     }

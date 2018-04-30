@@ -75,7 +75,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     if (_hasValue && _id == currentid)
-                        base._observer.OnNext(_value);
+                        base.ForwardOnNext(_value);
                     _hasValue = false;
                 }
 
@@ -88,8 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
@@ -103,10 +102,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     if (_hasValue)
-                        base._observer.OnNext(_value);
+                        base.ForwardOnNext(_value);
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
@@ -170,8 +168,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        base.ForwardOnError(error);
                     }
 
                     return;
@@ -197,8 +194,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
@@ -212,10 +208,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     if (_hasValue)
-                        base._observer.OnNext(_value);
+                        base.ForwardOnNext(_value);
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnCompleted();
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
@@ -242,7 +237,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_parent._gate)
                     {
                         if (_parent._hasValue && _parent._id == _currentid)
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                         _parent._hasValue = false;
                         _self.Dispose();
@@ -253,8 +248,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -263,7 +257,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_parent._gate)
                     {
                         if (_parent._hasValue && _parent._id == _currentid)
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                         _parent._hasValue = false;
                         _self.Dispose();

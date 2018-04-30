@@ -35,8 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_seenValue)
                     {
-                        base._observer.OnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT));
-                        base.Dispose();
+                        base.ForwardOnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT));
                         return;
                     }
 
@@ -46,23 +45,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     if (!_seenValue)
                     {
-                        base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                        base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                     }
                     else
                     {
-                        base._observer.OnNext(_value);
-                        base._observer.OnCompleted();
+                        base.ForwardOnNext(_value);
+                        base.ForwardOnCompleted();
                     }
-
-                    base.Dispose();
                 }
             }
         }
@@ -107,8 +103,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        base.ForwardOnError(ex);
                         return;
                     }
 
@@ -116,8 +111,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (_seenValue)
                         {
-                            base._observer.OnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_MATCHING_ELEMENT));
-                            base.Dispose();
+                            base.ForwardOnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_MATCHING_ELEMENT));
                             return;
                         }
 
@@ -128,23 +122,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    base.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     if (!_seenValue)
                     {
-                        base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
+                        base.ForwardOnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
                     }
                     else
                     {
-                        base._observer.OnNext(_value);
-                        base._observer.OnCompleted();
+                        base.ForwardOnNext(_value);
+                        base.ForwardOnCompleted();
                     }
-
-                    base.Dispose();
                 }
             }
         }

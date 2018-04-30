@@ -68,9 +68,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void Invoke()
                 {
-                    base._observer.OnNext(0);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    base.ForwardOnNext(0);
+                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -160,7 +159,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 //
                 private long Tick(long count)
                 {
-                    base._observer.OnNext(count);
+                    base.ForwardOnNext(count);
                     return unchecked(count + 1);
                 }
 
@@ -224,7 +223,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     try
                     {
-                        base._observer.OnNext(0L);
+                        base.ForwardOnNext(0L);
                     }
                     catch (Exception e)
                     {
@@ -263,7 +262,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     if (Interlocked.Increment(ref _pendingTickCount) == 1)
                     {
-                        base._observer.OnNext(count);
+                        base.ForwardOnNext(count);
                         Interlocked.Decrement(ref _pendingTickCount);
                     }
 
@@ -274,7 +273,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        base._observer.OnNext(count);
+                        base.ForwardOnNext(count);
                     }
                     catch (Exception e)
                     {
