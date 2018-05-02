@@ -38,7 +38,7 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TSource> observer, bool enableSafeguard)
         {
-            var subscription = new SingleAssignmentDisposable();
+            Sink<TSource> sinkObserver = default(Sink<TSource>);
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -46,31 +46,33 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                observer = SafeObserver<TSource>.Create(observer, subscription);
+                sinkObserver = SafeObserver<TSource>.Create(observer);
+            }
+            else
+            if (observer is Sink<TSource> o)
+            {
+                sinkObserver = o;
+            }
+            else
+            {
+                sinkObserver = new SinkWrapper<TSource>(observer);
             }
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { subscription = subscription, observer = observer };
-                CurrentThreadScheduler.Instance.Schedule(state, Run);
+                CurrentThreadScheduler.Instance.Schedule(sinkObserver, Run);
             }
             else
             {
-                subscription.Disposable = Run(observer);
+                sinkObserver.OnSubscribe(Run(observer));
             }
 
-            return subscription;
+            return sinkObserver;
         }
 
-        private struct State
+        private IDisposable Run(IScheduler _, Sink<TSource> x)
         {
-            public SingleAssignmentDisposable subscription;
-            public IObserver<TSource> observer;
-        }
-
-        private IDisposable Run(IScheduler _, State x)
-        {
-            x.subscription.Disposable = Run(x.observer);
+            x.OnSubscribe(Run(x as IObserver<TSource>));
             return Disposable.Empty;
         }
 
@@ -101,7 +103,7 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TSource> observer, bool enableSafeguard)
         {
-            var subscription = new SubscriptionDisposable();
+            Sink<TSource> sinkObserver = default(Sink<TSource>);
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -109,36 +111,43 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                observer = SafeObserver<TSource>.Create(observer, subscription);
+                sinkObserver = SafeObserver<TSource>.Create(observer);
+            }
+            else
+            if (observer is Sink<TSource> o)
+            {
+                sinkObserver = o;
+            }
+            else
+            {
+                sinkObserver = new SinkWrapper<TSource>(observer);
             }
 
-            var sink = CreateSink(observer, subscription.Inner);
-
-            subscription.Sink = sink;
+            var sink = CreateSink(sinkObserver as IObserver<TSource>, sinkObserver);
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { sink = sink, inner = subscription.Inner };
+                var state = new State { sink = sink, disposable = sinkObserver };
 
                 CurrentThreadScheduler.Instance.Schedule(state, Run);
             }
             else
             {
-                subscription.Inner.Disposable = Run(sink);
+                sinkObserver.OnSubscribe(Run(sink));
             }
 
-            return subscription;
+            return sinkObserver;
         }
 
         private struct State
         {
             public TSink sink;
-            public SingleAssignmentDisposable inner;
+            public Sink<TSource> disposable;
         }
 
         private IDisposable Run(IScheduler _, State x)
         {
-            x.inner.Disposable = Run(x.sink);
+            x.disposable.OnSubscribe(Run(x.sink));
             return Disposable.Empty;
         }
 
@@ -163,5 +172,29 @@ namespace System.Reactive
             Interlocked.Exchange(ref Sink, null)?.Dispose();
             Inner.Dispose();
         }
+    }
+
+    internal sealed class SinkWrapper<TSource> : Sink<TSource>, IObserver<TSource>
+    {
+        internal SinkWrapper(IObserver<TSource> observer) : base(observer)
+        {
+
+        }
+
+        public void OnNext(TSource value)
+        {
+            base.ForwardOnNext(value);
+        }
+
+        public void OnError(Exception error)
+        {
+            base.ForwardOnError(error);
+        }
+
+        public void OnCompleted()
+        {
+            base.ForwardOnCompleted();
+        }
+
     }
 }
