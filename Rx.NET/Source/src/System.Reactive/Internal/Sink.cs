@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive
@@ -16,10 +17,27 @@ namespace System.Reactive
         protected internal volatile IObserver<TSource> _observer;
         private IDisposable _cancel;
 
+        public Sink(IObserver<TSource> observer)
+        {
+            _observer = observer;
+        }
+
         public Sink(IObserver<TSource> observer, IDisposable cancel)
         {
             _observer = observer;
-            _cancel = cancel;
+            // cancel is ignored because Sink is the new self-contained cancellable component
+            // Producer.CreateSink wraps or provides the upstream as a Sink<T> anyway
+            // Set via OnSubscribe()
+        }
+
+        internal virtual bool OnSubscribe(IDisposable upstream)
+        {
+            if (Interlocked.CompareExchange(ref _cancel, upstream, null) != null)
+            {
+                upstream?.Dispose();
+                return false;
+            }
+            return true;
         }
 
         public void Dispose()
@@ -31,7 +49,16 @@ namespace System.Reactive
         {
             _observer = NopObserver<TSource>.Instance;
 
-            Interlocked.Exchange(ref _cancel, null)?.Dispose();
+            var d = Interlocked.Exchange(ref _cancel, BooleanDisposable.True);
+            if (d != BooleanDisposable.True)
+            {
+                d?.Dispose();
+            }
+        }
+
+        internal bool IsDisposed()
+        {
+            return Volatile.Read(ref _cancel) == BooleanDisposable.True;
         }
 
         protected void ForwardOnNext(TSource value)
