@@ -16,7 +16,7 @@ namespace System.Reactive
         private IDisposable _cancel;
         private volatile IObserver<TSource> _observer;
 
-        public Sink(IObserver<TSource> observer, IDisposable cancel)
+        protected Sink(IObserver<TSource> observer, IDisposable cancel)
         {
             _observer = observer;
             _cancel = cancel;
