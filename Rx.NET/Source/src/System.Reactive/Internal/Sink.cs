@@ -9,14 +9,14 @@ namespace System.Reactive
     /// <summary>
     /// Base class for implementation of query operators, providing a lightweight sink that can be disposed to mute the outgoing observer.
     /// </summary>
-    /// <typeparam name="TSource">Type of the resulting sequence's elements.</typeparam>
+    /// <typeparam name="TTarget">Type of the resulting sequence's elements.</typeparam>
     /// <remarks>Implementations of sinks are responsible to enforce the message grammar on the associated observer. Upon sending a terminal message, a pairing Dispose call should be made to trigger cancellation of related resources and to mute the outgoing observer.</remarks>
-    internal abstract class Sink<TSource> : IDisposable
+    internal abstract class Sink<TTarget> : IDisposable
     {
         private IDisposable _cancel;
-        private volatile IObserver<TSource> _observer;
+        private volatile IObserver<TTarget> _observer;
 
-        protected Sink(IObserver<TSource> observer, IDisposable cancel)
+        protected Sink(IObserver<TTarget> observer, IDisposable cancel)
         {
             _observer = observer;
             _cancel = cancel;
@@ -29,12 +29,12 @@ namespace System.Reactive
 
         protected virtual void Dispose(bool disposing)
         {
-            _observer = NopObserver<TSource>.Instance;
+            _observer = NopObserver<TTarget>.Instance;
 
             Interlocked.Exchange(ref _cancel, null)?.Dispose();
         }
 
-        protected void ForwardOnNext(TSource value)
+        protected void ForwardOnNext(TTarget value)
         {
             _observer.OnNext(value);
         }
@@ -51,18 +51,18 @@ namespace System.Reactive
             Dispose();
         }
 
-        public IObserver<TSource> GetForwarder() => new _(this);
+        public IObserver<TTarget> GetForwarder() => new _(this);
 
-        private sealed class _ : IObserver<TSource>
+        private sealed class _ : IObserver<TTarget>
         {
-            private readonly Sink<TSource> _forward;
+            private readonly Sink<TTarget> _forward;
 
-            public _(Sink<TSource> forward)
+            public _(Sink<TTarget> forward)
             {
                 _forward = forward;
             }
 
-            public void OnNext(TSource value)
+            public void OnNext(TTarget value)
             {
                 _forward.ForwardOnNext(value);
             }
