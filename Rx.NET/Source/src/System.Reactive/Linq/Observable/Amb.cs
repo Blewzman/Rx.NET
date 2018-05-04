@@ -81,7 +81,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             _parent._choice = _me;
                             _otherSubscription.Dispose();
-                            _observer._disposable = _subscription;
                             _observer._target = _parent._observer;
                         }
 
@@ -100,7 +99,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             _parent._choice = _me;
                             _otherSubscription.Dispose();
-                            _observer._disposable = _subscription;
                             _observer._target = _parent._observer;
                         }
 
@@ -119,7 +117,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             _parent._choice = _me;
                             _otherSubscription.Dispose();
-                            _observer._disposable = _subscription;
                             _observer._target = _parent._observer;
                         }
 
