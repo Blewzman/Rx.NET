@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -29,6 +29,21 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private AmbState _choice;
+
+            public void OnCompleted()
+            {
+                ForwardOnCompleted();
+            }
+
+            public void OnError(Exception error)
+            {
+                ForwardOnError(error);
+            }
+
+            public void OnNext(TSource value)
+            {
+                ForwardOnNext(value);
+            }
 
             public IDisposable Run(Amb<TSource> parent)
             {
@@ -38,11 +53,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var gate = new object();
 
-                var lo = new AmbObserver(d);
-                lo._target = new DecisionObserver(this, gate, AmbState.Left, rs, lo);
-
-                var ro = new AmbObserver(d);
-                ro._target = new DecisionObserver(this, gate, AmbState.Right, ls, ro);
+                var lo = new AmbObserver(d, this, gate, AmbState.Left, rs);
+                var ro = new AmbObserver(d, this, gate, AmbState.Right, ls);
 
                 _choice = AmbState.Neither;
 
@@ -52,86 +64,87 @@ namespace System.Reactive.Linq.ObservableImpl
                 return d;
             }
 
-            private sealed class DecisionObserver : IObserver<TSource>
-            {
-                private readonly _ _parent;
-                private readonly AmbState _me;
-                private readonly IDisposable _otherSubscription;
-                private readonly object _gate;
-                private readonly AmbObserver _observer;
-
-                public DecisionObserver(_ parent, object gate, AmbState me, IDisposable otherSubscription, AmbObserver observer)
-                {
-                    _parent = parent;
-                    _gate = gate;
-                    _me = me;
-                    _otherSubscription = otherSubscription;
-                    _observer = observer;
-                }
-
-                public void OnNext(TSource value)
-                {
-                    lock (_gate)
-                    {
-                        if (_parent._choice == AmbState.Neither)
-                        {
-                            _parent._choice = _me;
-                            _otherSubscription.Dispose();
-                            _observer._target = _parent._observer;
-                        }
-
-                        if (_parent._choice == _me)
-                        {
-                            _parent.ForwardOnNext(value);
-                        }
-                    }
-                }
-
-                public void OnError(Exception error)
-                {
-                    lock (_gate)
-                    {
-                        if (_parent._choice == AmbState.Neither)
-                        {
-                            _parent._choice = _me;
-                            _otherSubscription.Dispose();
-                            _observer._target = _parent._observer;
-                        }
-
-                        if (_parent._choice == _me)
-                        {
-                            _parent.ForwardOnError(error);
-                        }
-                    }
-                }
-
-                public void OnCompleted()
-                {
-                    lock (_gate)
-                    {
-                        if (_parent._choice == AmbState.Neither)
-                        {
-                            _parent._choice = _me;
-                            _otherSubscription.Dispose();
-                            _observer._target = _parent._observer;
-                        }
-
-                        if (_parent._choice == _me)
-                        {
-                            _parent.ForwardOnCompleted();
-                        }
-                    }
-                }
-            }
-
             private sealed class AmbObserver : IObserver<TSource>
             {
-                public IObserver<TSource> _target;
+                private sealed class DecisionObserver : IObserver<TSource>
+                {
+                    private readonly _ _parent;
+                    private readonly AmbState _me;
+                    private readonly IDisposable _otherSubscription;
+                    private readonly object _gate;
+                    private readonly AmbObserver _observer;
+
+                    public DecisionObserver(_ parent, object gate, AmbState me, IDisposable otherSubscription, AmbObserver observer)
+                    {
+                        _parent = parent;
+                        _gate = gate;
+                        _me = me;
+                        _otherSubscription = otherSubscription;
+                        _observer = observer;
+                    }
+
+                    public void OnNext(TSource value)
+                    {
+                        lock (_gate)
+                        {
+                            if (_parent._choice == AmbState.Neither)
+                            {
+                                _parent._choice = _me;
+                                _otherSubscription.Dispose();
+                                _observer._target = _parent;
+                            }
+
+                            if (_parent._choice == _me)
+                            {
+                                _parent.ForwardOnNext(value);
+                            }
+                        }
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_gate)
+                        {
+                            if (_parent._choice == AmbState.Neither)
+                            {
+                                _parent._choice = _me;
+                                _otherSubscription.Dispose();
+                                _observer._target = _parent;
+                            }
+
+                            if (_parent._choice == _me)
+                            {
+                                _parent.ForwardOnError(error);
+                            }
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        lock (_gate)
+                        {
+                            if (_parent._choice == AmbState.Neither)
+                            {
+                                _parent._choice = _me;
+                                _otherSubscription.Dispose();
+                                _observer._target = _parent;
+                            }
+
+                            if (_parent._choice == _me)
+                            {
+                                _parent.ForwardOnCompleted();
+                            }
+                        }
+                    }
+                }
+
+                private IObserver<TSource> _target;
                 private readonly IDisposable _disposable;
 
-                public AmbObserver(IDisposable disposable)
+                public AmbObserver(IDisposable disposable, _ parent, object gate, AmbState me, IDisposable otherSubscription)
                 {
                     _disposable = disposable;
+                    _target = new DecisionObserver(parent, gate, me, otherSubscription, this);
                 }
 
                 public void OnNext(TSource value)
