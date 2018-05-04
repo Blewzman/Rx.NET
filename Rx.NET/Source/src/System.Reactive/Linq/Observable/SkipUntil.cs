@@ -49,13 +49,12 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class SourceObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
-                public volatile IObserver<TSource> _observer;
+                public volatile bool _forward;
                 private readonly SingleAssignmentDisposable _subscription;
 
                 public SourceObserver(_ parent)
                 {
                     _parent = parent;
-                    _observer = NopObserver<TSource>.Instance;
                     _subscription = new SingleAssignmentDisposable();
                 }
 
@@ -66,7 +65,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TSource value)
                 {
-                    _observer.OnNext(value);
+                    if (_forward)
+                        _parent.ForwardOnNext(value);
                 }
 
                 public void OnError(Exception error)
@@ -76,7 +76,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnCompleted()
                 {
-                    _observer.OnCompleted();
+                    if (_forward)
+                        _parent.ForwardOnCompleted();
+
                     _subscription.Dispose(); // We can't cancel the other stream yet, it may be on its way to dispatch an OnError message and we don't want to have a race.
                 }
             }
@@ -101,7 +103,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TOther value)
                 {
-                    _sourceObserver._observer = _parent._observer;
+                    _sourceObserver._forward = true;
                     _subscription.Dispose();
                 }
 

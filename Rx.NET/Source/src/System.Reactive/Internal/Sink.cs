@@ -13,8 +13,8 @@ namespace System.Reactive
     /// <remarks>Implementations of sinks are responsible to enforce the message grammar on the associated observer. Upon sending a terminal message, a pairing Dispose call should be made to trigger cancellation of related resources and to mute the outgoing observer.</remarks>
     internal abstract class Sink<TSource> : IDisposable
     {
-        protected internal volatile IObserver<TSource> _observer;
         private IDisposable _cancel;
+        private volatile IObserver<TSource> _observer;
 
         public Sink(IObserver<TSource> observer, IDisposable cancel)
         {

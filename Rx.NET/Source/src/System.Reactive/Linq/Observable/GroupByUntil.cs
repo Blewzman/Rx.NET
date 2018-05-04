@@ -35,6 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
         {
+            private readonly object _gate = new object();
             private readonly object _nullGate = new object();
             private readonly CompositeDisposable _groupDisposable = new CompositeDisposable();
             private readonly RefCountDisposable _refCountDisposable;
@@ -137,7 +138,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    lock (base._observer)
+                    lock (_gate)
                         base.ForwardOnNext(group);
 
                     var md = new SingleAssignmentDisposable();
@@ -249,7 +250,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 foreach (var w in _map.Values)
                     w.OnCompleted();
 
-                lock (base._observer)
+                lock (_gate)
                     base.ForwardOnCompleted();
             }
 
@@ -269,7 +270,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 foreach (var w in _map.Values)
                     w.OnError(exception);
 
-                lock (base._observer)
+                lock (_gate)
                     base.ForwardOnError(exception);
             }
         }
