@@ -40,11 +40,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var lo = new AmbObserver();
                 lo._disposable = d;
-                lo._target = new DecisionObserver(this, gate, AmbState.Left, ls, rs, lo);
+                lo._target = new DecisionObserver(this, gate, AmbState.Left, rs, lo);
 
                 var ro = new AmbObserver();
                 ro._disposable = d;
-                ro._target = new DecisionObserver(this, gate, AmbState.Right, rs, ls, ro);
+                ro._target = new DecisionObserver(this, gate, AmbState.Right, ls, ro);
 
                 _choice = AmbState.Neither;
 
@@ -58,17 +58,15 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly _ _parent;
                 private readonly AmbState _me;
-                private readonly IDisposable _subscription;
                 private readonly IDisposable _otherSubscription;
                 private readonly object _gate;
                 private readonly AmbObserver _observer;
 
-                public DecisionObserver(_ parent, object gate, AmbState me, IDisposable subscription, IDisposable otherSubscription, AmbObserver observer)
+                public DecisionObserver(_ parent, object gate, AmbState me, IDisposable otherSubscription, AmbObserver observer)
                 {
                     _parent = parent;
                     _gate = gate;
                     _me = me;
-                    _subscription = subscription;
                     _otherSubscription = otherSubscription;
                     _observer = observer;
                 }
