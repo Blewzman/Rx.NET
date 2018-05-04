@@ -38,12 +38,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var gate = new object();
 
-                var lo = new AmbObserver();
-                lo._disposable = d;
+                var lo = new AmbObserver(d);
                 lo._target = new DecisionObserver(this, gate, AmbState.Left, rs, lo);
 
-                var ro = new AmbObserver();
-                ro._disposable = d;
+                var ro = new AmbObserver(d);
                 ro._target = new DecisionObserver(this, gate, AmbState.Right, ls, ro);
 
                 _choice = AmbState.Neither;
@@ -129,8 +127,12 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class AmbObserver : IObserver<TSource>
             {
                 public IObserver<TSource> _target;
+                private readonly IDisposable _disposable;
 
-                public IDisposable _disposable;
+                public AmbObserver(IDisposable disposable)
+                {
+                    _disposable = disposable;
+                }
 
                 public void OnNext(TSource value)
                 {
