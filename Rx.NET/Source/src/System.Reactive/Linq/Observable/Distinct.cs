@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private HashSet<TKey> _hashSet;
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hashSet = new HashSet<TKey>(parent._comparer);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 var hasAdded = false;
@@ -52,16 +52,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (hasAdded)
                     base.ForwardOnNext(value);
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }

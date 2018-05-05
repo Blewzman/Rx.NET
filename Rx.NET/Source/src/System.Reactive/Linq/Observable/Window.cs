@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource> ,TSource>
             {
                 private readonly Queue<ISubject<TSource>> _queue = new Queue<ISubject<TSource>>();
                 private readonly SingleAssignmentDisposable _m = new SingleAssignmentDisposable();
@@ -67,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return new WindowObservable<TSource>(s, _refCountDisposable);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     foreach (var s in _queue)
                         s.OnNext(value);
@@ -87,7 +87,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     while (_queue.Count > 0)
                         _queue.Dequeue().OnError(error);
@@ -95,7 +95,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.ForwardOnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     while (_queue.Count > 0)
                         _queue.Dequeue().OnCompleted();
@@ -124,7 +124,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly Queue<ISubject<TSource>> _q = new Queue<ISubject<TSource>>();
@@ -231,7 +231,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return Disposable.Empty;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -251,7 +251,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -281,7 +281,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 private readonly object _gate = new object();
 
@@ -321,7 +321,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.ForwardOnNext(new WindowObservable<TSource>(_subject, _refCountDisposable));
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -329,7 +329,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -339,7 +339,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -370,7 +370,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly SerialDisposable _timerD = new SerialDisposable();
@@ -439,7 +439,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return d;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var newWindow = default(Subject<TSource>);
 
@@ -463,7 +463,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         CreateTimer(newWindow);
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -472,7 +472,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -501,7 +501,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _windowGate = new AsyncLock();
@@ -599,7 +599,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -607,7 +607,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -616,7 +616,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -642,7 +642,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 private readonly object _gate = new object();
 
@@ -705,7 +705,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -713,7 +713,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -722,7 +722,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {

@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IList<TSource>, TSource>
             {
                 private readonly Queue<IList<TSource>> _queue = new Queue<IList<TSource>>();
 
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _queue.Enqueue(s);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     foreach (var s in _queue)
                         s.Add(value);
@@ -75,7 +75,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         CreateWindow();
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     while (_queue.Count > 0)
                         _queue.Dequeue().Clear();
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.ForwardOnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     while (_queue.Count > 0)
                     {
@@ -117,7 +117,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IList<TSource>, TSource>
             {
                 private readonly TimeSpan _timeShift;
                 private readonly IScheduler _scheduler;
@@ -219,7 +219,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return Disposable.Empty;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -228,7 +228,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -239,7 +239,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -270,7 +270,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IList<TSource>, TSource>
             {
                 private readonly object _gate = new object();
 
@@ -300,7 +300,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -308,7 +308,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -318,7 +318,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -348,7 +348,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IList<TSource>, TSource>
             {
                 private readonly Ferry _parent;
 
@@ -409,7 +409,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return d;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var newWindow = false;
                     var newId = 0;
@@ -435,7 +435,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -444,7 +444,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -473,7 +473,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IList<TSource>, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _bufferGate = new AsyncLock();
@@ -562,7 +562,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -570,7 +570,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -579,7 +579,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -605,7 +605,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IList<TSource>, TSource>
             {
                 private readonly object _gate = new object();
 
@@ -656,7 +656,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -664,7 +664,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -673,7 +673,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {

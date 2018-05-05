@@ -19,25 +19,25 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<Notification<TSource>>, IObserver<TSource>
+        internal sealed class _ : Sink<Notification<TSource>, TSource>
         {
             public _(IObserver<Notification<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 base.ForwardOnNext(Notification.CreateOnNext<TSource>(value));
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 base.ForwardOnNext(Notification.CreateOnError<TSource>(error));
                 base.ForwardOnCompleted();
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 base.ForwardOnNext(Notification.CreateOnCompleted<TSource>());
                 base.ForwardOnCompleted();

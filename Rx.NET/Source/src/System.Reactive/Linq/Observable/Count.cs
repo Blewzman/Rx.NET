@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<int>, IObserver<TSource>
+            internal sealed class _ : Sink<int, TSource>
             {
                 private int _count;
 
@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _count = 0;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -44,12 +44,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     base.ForwardOnNext(_count);
                     base.ForwardOnCompleted();
@@ -72,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<int>, IObserver<TSource>
+            internal sealed class _ : Sink<int, TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
                 private int _count;
@@ -84,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _count = 0;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -102,12 +97,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     base.ForwardOnNext(_count);
                     base.ForwardOnCompleted();

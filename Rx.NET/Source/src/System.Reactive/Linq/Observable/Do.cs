@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private readonly Action<TSource> _onNext;
 
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _onNext = onNext;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -44,16 +44,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     base.ForwardOnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -73,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private readonly IObserver<TSource> _doObserver;
 
@@ -83,7 +73,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _doObserver = doObserver;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -98,7 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.ForwardOnNext(value);
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     try
                     {
@@ -113,7 +103,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.ForwardOnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     try
                     {
@@ -149,7 +139,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -161,7 +151,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _parent = parent;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -176,7 +166,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.ForwardOnNext(value);
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     try
                     {
@@ -191,7 +181,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.ForwardOnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     try
                     {

@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private int _i;
 
@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _i = index;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 if (_i == 0)
                 {
@@ -40,12 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _i--;
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 base.ForwardOnError(new ArgumentOutOfRangeException("index"));
             }

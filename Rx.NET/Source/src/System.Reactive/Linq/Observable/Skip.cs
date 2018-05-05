@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private int _remaining;
 
@@ -46,22 +46,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     _remaining = count;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_remaining <= 0)
                         base.ForwardOnNext(value);
                     else
                         _remaining--;
-                }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -100,7 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private volatile bool _open;
 
@@ -121,20 +111,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     _open = true;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_open)
                         base.ForwardOnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
                 }
             }
         }

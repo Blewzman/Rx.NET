@@ -250,7 +250,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TFirst>
+            internal sealed class _ : Sink<TResult, TFirst>
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
@@ -286,7 +286,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return StableCompositeDisposable.Create(leftSubscription, _rightEnumerator);
                 }
 
-                public void OnNext(TFirst value)
+                public override void OnNext(TFirst value)
                 {
                     var hasNext = false;
                     try
@@ -329,16 +329,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         base.ForwardOnCompleted();
                     }
-                }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -589,7 +579,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private void OnError(Exception error)
+            private new void OnError(Exception error)
             {
                 lock (_gate)
                 {

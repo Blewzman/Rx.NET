@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>, TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return _refCountDisposable;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 try
@@ -143,12 +143,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 writer.OnNext(element);
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 Error(error);
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 _null?.OnCompleted();
 

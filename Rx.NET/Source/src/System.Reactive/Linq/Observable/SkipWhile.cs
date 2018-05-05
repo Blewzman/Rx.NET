@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private Func<TSource, bool> _predicate;
 
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _predicate = predicate;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_predicate != null)
                     {
@@ -58,16 +58,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         base.ForwardOnNext(value);
                     }
                 }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
-                }
             }
         }
 
@@ -86,7 +76,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private Func<TSource, int, bool> _predicate;
                 private int _index;
@@ -98,7 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _index = 0;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_predicate != null)
                     {
@@ -124,16 +114,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         base.ForwardOnNext(value);
                     }
-                }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
                 }
             }
         }

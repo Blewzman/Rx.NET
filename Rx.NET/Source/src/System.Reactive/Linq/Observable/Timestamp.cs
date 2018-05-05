@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<Timestamped<TSource>>, IObserver<TSource>
+        internal sealed class _ : Sink<Timestamped<TSource>, TSource>
         {
             private readonly IScheduler _scheduler;
 
@@ -31,19 +31,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 base.ForwardOnNext(new Timestamped<TSource>(value, _scheduler.Now));
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }

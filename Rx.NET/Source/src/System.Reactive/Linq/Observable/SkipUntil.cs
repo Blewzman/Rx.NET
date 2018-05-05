@@ -154,7 +154,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private volatile bool _open;
 
@@ -175,20 +175,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 _open = true;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 if (_open)
                     base.ForwardOnNext(value);
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }

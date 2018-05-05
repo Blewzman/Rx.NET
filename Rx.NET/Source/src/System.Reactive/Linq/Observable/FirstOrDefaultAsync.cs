@@ -19,25 +19,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     base.ForwardOnNext(value);
                     base.ForwardOnCompleted();
                 }
 
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     base.ForwardOnNext(default(TSource));
                     base.ForwardOnCompleted();
@@ -60,7 +55,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
 
@@ -70,7 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _predicate = predicate;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var b = false;
 
@@ -91,12 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     base.ForwardOnNext(default(TSource));
                     base.ForwardOnCompleted();

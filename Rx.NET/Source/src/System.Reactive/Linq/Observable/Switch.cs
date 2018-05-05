@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
+        internal sealed class _ : Sink<TSource, IObservable<TSource>>
         {
             private readonly object _gate = new object();
 
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return StableCompositeDisposable.Create(_subscription, _innerSubscription);
             }
 
-            public void OnNext(IObservable<TSource> value)
+            public override void OnNext(IObservable<TSource> value)
             {
                 var id = default(ulong);
                 lock (_gate)
@@ -62,13 +62,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 d.Disposable = value.SubscribeSafe(new InnerObserver(this, id, d));
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 lock (_gate)
                     base.ForwardOnError(error);
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 lock (_gate)
                 {

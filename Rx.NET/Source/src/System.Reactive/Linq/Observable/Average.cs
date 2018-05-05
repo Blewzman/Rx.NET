@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double>, IObserver<double>
+        internal sealed class _ : Sink<double>
         {
             private double _sum;
             private long _count;
@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(double value)
+            public override void OnNext(double value)
             {
                 try
                 {
@@ -45,12 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -78,7 +73,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float>, IObserver<float>
+        internal sealed class _ : Sink<float>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -90,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(float value)
+            public override void OnNext(float value)
             {
                 try
                 {
@@ -106,12 +101,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -139,7 +129,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal>, IObserver<decimal>
+        internal sealed class _ : Sink<decimal>
         {
             private decimal _sum;
             private long _count;
@@ -151,7 +141,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(decimal value)
+            public override void OnNext(decimal value)
             {
                 try
                 {
@@ -167,12 +157,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -200,7 +185,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double>, IObserver<int>
+        internal sealed class _ : Sink<double, int>
         {
             private long _sum;
             private long _count;
@@ -212,7 +197,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(int value)
+            public override void OnNext(int value)
             {
                 try
                 {
@@ -228,12 +213,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -261,7 +241,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double>, IObserver<long>
+        internal sealed class _ : Sink<double, long>
         {
             private long _sum;
             private long _count;
@@ -273,7 +253,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(long value)
+            public override void OnNext(long value)
             {
                 try
                 {
@@ -289,12 +269,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -322,7 +297,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?>, IObserver<double?>
+        internal sealed class _ : Sink<double?>
         {
             private double _sum;
             private long _count;
@@ -334,7 +309,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(double? value)
+            public override void OnNext(double? value)
             {
                 try
                 {
@@ -353,12 +328,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -387,7 +357,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float?>, IObserver<float?>
+        internal sealed class _ : Sink<float?>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -399,7 +369,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(float? value)
+            public override void OnNext(float? value)
             {
                 try
                 {
@@ -418,12 +388,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -452,7 +417,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal?>, IObserver<decimal?>
+        internal sealed class _ : Sink<decimal?>
         {
             private decimal _sum;
             private long _count;
@@ -464,7 +429,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(decimal? value)
+            public override void OnNext(decimal? value)
             {
                 try
                 {
@@ -483,12 +448,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -517,7 +477,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?>, IObserver<int?>
+        internal sealed class _ : Sink<double?, int?>
         {
             private long _sum;
             private long _count;
@@ -529,7 +489,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(int? value)
+            public override void OnNext(int? value)
             {
                 try
                 {
@@ -548,12 +508,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {
@@ -582,7 +537,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?>, IObserver<long?>
+        internal sealed class _ : Sink<double?, long?>
         {
             private long _sum;
             private long _count;
@@ -594,7 +549,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = 0L;
             }
 
-            public void OnNext(long? value)
+            public override void OnNext(long? value)
             {
                 try
                 {
@@ -613,12 +568,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (_count > 0)
                 {

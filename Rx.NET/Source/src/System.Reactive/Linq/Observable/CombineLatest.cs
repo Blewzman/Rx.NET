@@ -474,7 +474,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private void OnError(Exception error)
+            private new void OnError(Exception error)
             {
                 lock (_gate)
                 {

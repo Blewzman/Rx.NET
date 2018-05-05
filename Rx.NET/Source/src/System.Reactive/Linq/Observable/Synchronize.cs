@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.Subscribe(sink);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private readonly object _gate;
 
@@ -34,7 +34,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _gate = gate ?? new object();
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 lock (_gate)
                 {
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 lock (_gate)
                 {
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 lock (_gate)
                 {

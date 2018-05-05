@@ -33,16 +33,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer, cancel)
             {
             }
-
-            public override void OnNext(TSource value)
-            {
-                base.ForwardOnNext(value);
-            }
-
-            public override void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
         }
     }
 }

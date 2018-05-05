@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TValue> Eval() => _observableFactory();
 
-        internal sealed class _ : Sink<TValue>, IObserver<TValue>
+        internal sealed class _ : Sink<TValue>
         {
             private readonly Func<IObservable<TValue>> _observableFactory;
 
@@ -45,21 +45,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 return result.SubscribeSafe(this);
-            }
-
-            public void OnNext(TValue value)
-            {
-                base.ForwardOnNext(value);
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }

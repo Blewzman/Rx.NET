@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private readonly TSource _defaultValue;
             private bool _found;
@@ -31,21 +31,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 _found = false;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 _found = true;
                 base.ForwardOnNext(value);
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (!_found)
                     base.ForwardOnNext(_defaultValue);
+
                 base.ForwardOnCompleted();
             }
         }

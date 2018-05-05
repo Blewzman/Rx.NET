@@ -35,22 +35,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 return null;
             }
 
-            public override void OnNext(TSource value)
-            {
-                base.ForwardOnNext(value);
-            }
-
             private Exception _lastException;
 
             public override void OnError(Exception error)
             {
                 _lastException = error;
                 _recurse();
-            }
-
-            public override void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
 
             protected override void Done()
@@ -89,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private readonly Func<TException, IObservable<TSource>> _handler;
 
@@ -112,12 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return _subscription;
             }
 
-            public void OnNext(TSource value)
-            {
-                base.ForwardOnNext(value);
-            }
-
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 if (error is TException e)
                 {
@@ -140,11 +125,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     base.ForwardOnError(error);
                 }
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
 
             private sealed class HandlerObserver : IObserver<TSource>

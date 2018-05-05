@@ -6,12 +6,25 @@ using System.Threading;
 
 namespace System.Reactive
 {
+    internal abstract class Sink<T> : Sink<T, T>
+    {
+        protected Sink(IObserver<T> observer, IDisposable cancel) : base(observer, cancel)
+        {
+        }
+
+        public override void OnNext(T value)
+        {
+            base.ForwardOnNext(value);
+        }
+    }
+
     /// <summary>
     /// Base class for implementation of query operators, providing a lightweight sink that can be disposed to mute the outgoing observer.
     /// </summary>
     /// <typeparam name="TTarget">Type of the resulting sequence's elements.</typeparam>
+    /// <typeparam name="TSource"></typeparam>
     /// <remarks>Implementations of sinks are responsible to enforce the message grammar on the associated observer. Upon sending a terminal message, a pairing Dispose call should be made to trigger cancellation of related resources and to mute the outgoing observer.</remarks>
-    internal abstract class Sink<TTarget> : IDisposable
+    internal abstract class Sink<TTarget, TSource> : IObserver<TSource>, IDisposable
     {
         private IDisposable _cancel;
         private volatile IObserver<TTarget> _observer;
@@ -25,6 +38,18 @@ namespace System.Reactive
         public void Dispose()
         {
             Dispose(true);
+        }
+
+        public abstract void OnNext(TSource value);
+
+        public virtual void OnError(Exception error)
+        {
+            ForwardOnError(error);
+        }
+
+        public virtual void OnCompleted()
+        {
+            ForwardOnCompleted();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -55,9 +80,9 @@ namespace System.Reactive
 
         private sealed class _ : IObserver<TTarget>
         {
-            private readonly Sink<TTarget> _forward;
+            private readonly Sink<TTarget, TSource> _forward;
 
-            public _(Sink<TTarget> forward)
+            public _(Sink<TTarget, TSource> forward)
             {
                 _forward = forward;
             }

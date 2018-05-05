@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<bool>, IObserver<TSource>
+        internal sealed class _ : Sink<bool, TSource>
         {
             private readonly TSource _value;
             private readonly IEqualityComparer<TSource> _comparer;
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _comparer = parent._comparer;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var res = false;
                 try
@@ -55,12 +55,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 base.ForwardOnNext(false);
                 base.ForwardOnCompleted();

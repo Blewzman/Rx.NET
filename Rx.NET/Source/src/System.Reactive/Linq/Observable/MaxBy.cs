@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+        internal sealed class _ : Sink<IList<TSource>, TSource>
         {
             private readonly MaxBy<TSource, TKey> _parent;
             private bool _hasValue;
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _list = new List<TSource>();
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 try
@@ -85,12 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 base.ForwardOnNext(_list);
                 base.ForwardOnCompleted();

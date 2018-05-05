@@ -220,7 +220,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<bool>, IObserver<TSource>
+            internal sealed class _ : Sink<bool, TSource>
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 
@@ -257,7 +257,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     );
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var equal = false;
 
@@ -282,12 +282,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     var hasNext = false;
 

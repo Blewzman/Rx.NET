@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private readonly TimeSpan _dueTime;
             private readonly IScheduler _scheduler;
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return StableCompositeDisposable.Create(subscription, _cancelable);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var currentid = default(ulong);
                 lock (_gate)
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Disposable.Empty;
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 _cancelable.Dispose();
 
@@ -94,8 +94,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     _id = unchecked(_id + 1);
                 }
             }
-
-            public void OnCompleted()
+            
+            public override void OnCompleted()
             {
                 _cancelable.Dispose();
 
@@ -128,7 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource, TSource>
         {
             private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return StableCompositeDisposable.Create(subscription, _cancelable);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var throttle = default(IObservable<TThrottle>);
                 try
@@ -188,7 +188,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 d.Disposable = throttle.SubscribeSafe(new ThrottleObserver(this, value, currentid, d));
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 _cancelable.Dispose();
 
@@ -201,7 +201,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 _cancelable.Dispose();
 

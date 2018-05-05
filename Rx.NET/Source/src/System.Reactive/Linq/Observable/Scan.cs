@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TAccumulate>, IObserver<TSource>
+        internal sealed class _ : Sink<TAccumulate, TSource>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _accumulation = parent._seed;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 try
                 {
@@ -46,16 +46,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 base.ForwardOnNext(_accumulation);
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }
@@ -75,7 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private readonly Func<TSource, TSource, TSource> _accumulator;
             private TSource _accumulation;
@@ -89,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hasAccumulation = false;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 try
                 {
@@ -110,16 +100,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 base.ForwardOnNext(_accumulation);
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }

@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly IEqualityComparer<TKey> _comparer;
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hasCurrentKey = false;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 try
@@ -74,16 +74,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     _currentKey = key;
                     base.ForwardOnNext(value);
                 }
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }

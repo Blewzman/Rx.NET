@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<System.Reactive.TimeInterval<TSource>>, IObserver<TSource>
+        internal sealed class _ : Sink<System.Reactive.TimeInterval<TSource>, TSource>
         {
             public _(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -39,22 +39,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 return parent._source.Subscribe(this);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var now = _watch.Elapsed;
                 var span = now.Subtract(_last);
                 _last = now;
                 base.ForwardOnNext(new System.Reactive.TimeInterval<TSource>(value, span));
-            }
-
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
-            {
-                base.ForwardOnCompleted();
             }
         }
     }

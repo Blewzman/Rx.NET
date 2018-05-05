@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return _group;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var collection = default(IObservable<TCollection>);
 
@@ -79,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     innerSubscription.Disposable = collection.SubscribeSafe(new InnerObserver(this, value, innerSubscription));
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -87,7 +87,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     _isStopped = true;
                     if (_group.Count == 1)
@@ -191,7 +191,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -221,7 +221,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return _group;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var index = checked(_index++);
                     var collection = default(IObservable<TCollection>);
@@ -244,7 +244,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     innerSubscription.Disposable = collection.SubscribeSafe(new InnerObserver(this, value, index, innerSubscription));
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -252,7 +252,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     _isStopped = true;
                     if (_group.Count == 1)
@@ -360,7 +360,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
@@ -372,7 +372,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _resultSelector = parent._resultSelector;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var xs = default(IEnumerable<TCollection>);
                     try
@@ -426,16 +426,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             e.Dispose();
                     }
                 }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
-                }
             }
         }
 
@@ -456,7 +446,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
@@ -470,7 +460,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private int _index;
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var index = checked(_index++);
 
@@ -527,16 +517,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             e.Dispose();
                     }
                 }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
-                }
             }
         }
 
@@ -557,7 +537,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -581,7 +561,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var task = default(Task<TCollection>);
                     try
@@ -666,7 +646,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -674,7 +654,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (Interlocked.Decrement(ref _count) == 0)
                     {
@@ -704,7 +684,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -729,7 +709,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var index = checked(_index++);
 
@@ -816,7 +796,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -824,7 +804,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (Interlocked.Decrement(ref _count) == 0)
                     {
@@ -855,7 +835,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal class _ : Sink<TResult>, IObserver<TSource>
+            internal class _ : Sink<TResult, TSource>
             {
                 protected readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -882,7 +862,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return _group;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var inner = default(IObservable<TResult>);
 
@@ -902,7 +882,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     SubscribeInner(inner);
                 }
 
-                public virtual void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -910,7 +890,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public virtual void OnCompleted()
+                public override void OnCompleted()
                 {
                     Final();
                 }
@@ -1089,7 +1069,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal class _ : Sink<TResult>, IObserver<TSource>
+            internal class _ : Sink<TResult, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -1117,7 +1097,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return _group;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var inner = default(IObservable<TResult>);
 
@@ -1137,7 +1117,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     SubscribeInner(inner);
                 }
 
-                public virtual void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -1145,7 +1125,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public virtual void OnCompleted()
+                public override void OnCompleted()
                 {
                     Final();
                 }
@@ -1330,7 +1310,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly Func<TSource, IEnumerable<TResult>> _selector;
 
@@ -1340,7 +1320,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _selector = parent._selector;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var xs = default(IEnumerable<TResult>);
                     try
@@ -1394,16 +1374,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             e.Dispose();
                     }
                 }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
-                }
             }
         }
 
@@ -1422,7 +1392,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly Func<TSource, int, IEnumerable<TResult>> _selector;
 
@@ -1434,7 +1404,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private int _index;
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var xs = default(IEnumerable<TResult>);
                     try
@@ -1488,16 +1458,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             e.Dispose();
                     }
                 }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
-                }
             }
         }
 
@@ -1516,7 +1476,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -1538,7 +1498,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var task = default(Task<TResult>);
                     try
@@ -1600,7 +1560,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -1608,7 +1568,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (Interlocked.Decrement(ref _count) == 0)
                     {
@@ -1636,7 +1596,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult>, IObserver<TSource>
+            internal sealed class _ : Sink<TResult, TSource>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -1659,7 +1619,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var task = default(Task<TResult>);
                     try
@@ -1721,7 +1681,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -1729,7 +1689,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (Interlocked.Decrement(ref _count) == 0)
                     {

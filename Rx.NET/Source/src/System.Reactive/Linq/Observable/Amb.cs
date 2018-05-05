@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -29,21 +29,6 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private AmbState _choice;
-
-            public void OnCompleted()
-            {
-                ForwardOnCompleted();
-            }
-
-            public void OnError(Exception error)
-            {
-                ForwardOnError(error);
-            }
-
-            public void OnNext(TSource value)
-            {
-                ForwardOnNext(value);
-            }
 
             public IDisposable Run(Amb<TSource> parent)
             {

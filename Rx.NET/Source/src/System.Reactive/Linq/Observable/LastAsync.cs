@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private TSource _value;
                 private bool _seenValue;
@@ -31,18 +31,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     _seenValue = false;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     _value = value;
                     _seenValue = true;
                 }
 
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (!_seenValue)
                     {
@@ -72,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
                 private TSource _value;
@@ -87,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _seenValue = false;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var b = false;
 
@@ -108,12 +103,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (!_seenValue)
                     {

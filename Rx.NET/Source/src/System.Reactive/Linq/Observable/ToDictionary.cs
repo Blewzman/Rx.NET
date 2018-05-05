@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<IDictionary<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<IDictionary<TKey, TElement>, TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dictionary = new Dictionary<TKey, TElement>(parent._comparer);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 try
                 {
@@ -51,12 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 base.ForwardOnNext(_dictionary);
                 base.ForwardOnCompleted();

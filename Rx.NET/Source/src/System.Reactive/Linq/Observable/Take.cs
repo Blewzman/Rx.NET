@@ -39,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource>
             {
                 private int _remaining;
 
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _remaining = count;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_remaining > 0)
                     {
@@ -61,16 +61,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             base.ForwardOnCompleted();
                         }
                     }
-                }
-
-                public void OnError(Exception error)
-                {
-                    base.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    base.ForwardOnCompleted();
                 }
             }
         }
@@ -109,7 +99,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, TSource>
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -135,7 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -143,7 +133,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
@@ -151,7 +141,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {

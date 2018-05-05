@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource[]>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource[], TSource>
         {
             private readonly List<TSource> _list;
 
@@ -29,17 +29,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 _list = new List<TSource>();
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 _list.Add(value);
             }
 
-            public void OnError(Exception error)
-            {
-                base.ForwardOnError(error);
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 base.ForwardOnNext(_list.ToArray());
                 base.ForwardOnCompleted();

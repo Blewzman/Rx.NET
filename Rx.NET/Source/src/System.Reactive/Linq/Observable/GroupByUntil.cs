@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>, TSource>
         {
             private readonly object _gate = new object();
             private readonly object _nullGate = new object();
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Subject.Create<TElement>(new AsyncLockObserver<TElement>(sub, new Concurrency.AsyncLock()), sub);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 try
@@ -229,12 +229,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 Error(error);
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 //
                 // NOTE: A race with OnCompleted triggered by a duration selector is fine when
