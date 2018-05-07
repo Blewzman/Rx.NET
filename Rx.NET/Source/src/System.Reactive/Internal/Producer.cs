@@ -101,7 +101,13 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TTarget> observer, bool enableSafeguard)
         {
-            var subscription = new SubscriptionDisposable();
+            //This is passed to Sink creation and later assigned with the outcome of Run,
+            //so this allocation is (still) inevitable.
+            var runDisposable = new SingleAssignmentDisposable();
+
+            //This will only ever be allocated if we need to put a safeguard around the observer.
+            //or if the created Sink does not inherit from the internal Sink class (see below).
+            BinarySingleAssignmentDisposable safeObserverDisposable = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -109,25 +115,46 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                observer = SafeObserver<TTarget>.Create(observer, subscription);
+                safeObserverDisposable = new BinarySingleAssignmentDisposable();
+                observer = SafeObserver<TTarget>.Create(observer, safeObserverDisposable);
             }
 
-            var sink = CreateSink(observer, subscription.Inner);
+            var sink = CreateSink(observer, runDisposable);
+            var sinkIsInternal = sink is Sink<TTarget>;
 
-            subscription.Sink = sink;
+            if (!sinkIsInternal && safeObserverDisposable == null)
+            {
+                //If sink inherits from the internal class Sink<TTarget>, we know that disposing it
+                //will dispose the runDisposable passed in during Sink creation. Is is therefore
+                //sufficient, to continue working with sink. If not, we have to combine the sink and the run.
+                //Again, on the hot path, this allocation is avoided.
+                safeObserverDisposable = new BinarySingleAssignmentDisposable();
+            }
 
+            if (safeObserverDisposable != null)
+            {
+                //So we either needed to enable a safeguard or our Sink is some obscure type
+                //we don't know too much about...
+                safeObserverDisposable.Disposable1 = sink;
+
+                //...if the latter is true, also set the run.
+                if (!sinkIsInternal)
+                    safeObserverDisposable.Disposable2 = runDisposable;
+            }
+            
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { sink = sink, inner = subscription.Inner };
+                var state = new State { sink = sink, inner = runDisposable };
 
                 CurrentThreadScheduler.Instance.Schedule(state, Run);
             }
             else
             {
-                subscription.Inner.Disposable = Run(sink);
+                runDisposable.Disposable = Run(sink);
             }
 
-            return subscription;
+            //On the hot path, returning sink will suffice. This will save one allocation.
+            return safeObserverDisposable ?? (IDisposable)sink;
         }
 
         private struct State
