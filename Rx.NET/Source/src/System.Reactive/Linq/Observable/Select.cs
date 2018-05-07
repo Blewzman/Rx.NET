@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, TResult> _selector;
 
@@ -64,7 +64,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, int, TResult> _selector;
                 private int _index;

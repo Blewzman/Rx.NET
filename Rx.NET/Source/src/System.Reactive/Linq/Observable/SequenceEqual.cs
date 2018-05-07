@@ -220,7 +220,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<bool, TSource>
+            internal sealed class _ : Sink<TSource, bool> 
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 

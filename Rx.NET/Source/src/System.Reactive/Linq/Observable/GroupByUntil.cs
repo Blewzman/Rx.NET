@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>, TSource>
+        internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>> 
         {
             private readonly object _gate = new object();
             private readonly object _nullGate = new object();

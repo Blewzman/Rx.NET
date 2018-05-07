@@ -185,7 +185,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double, int>
+        internal sealed class _ : Sink<int, double> 
         {
             private long _sum;
             private long _count;
@@ -241,7 +241,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double, long>
+        internal sealed class _ : Sink<long, double> 
         {
             private long _sum;
             private long _count;
@@ -477,7 +477,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?, int?>
+        internal sealed class _ : Sink<int?, double?> 
         {
             private long _sum;
             private long _count;
@@ -537,7 +537,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?, long?>
+        internal sealed class _ : Sink<long?, double?> 
         {
             private long _sum;
             private long _count;

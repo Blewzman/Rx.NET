@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TAccumulate, TSource>
+        internal sealed class _ : Sink<TSource, TAccumulate> 
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;

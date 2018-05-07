@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<ILookup<TKey, TElement>, TSource>
+        internal sealed class _ : Sink<TSource, ILookup<TKey, TElement>> 
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;

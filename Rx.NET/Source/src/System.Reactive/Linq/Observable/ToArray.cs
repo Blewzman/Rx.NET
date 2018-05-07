@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource[], TSource>
+        internal sealed class _ : Sink<TSource, TSource[]> 
         {
             private readonly List<TSource> _list;
 

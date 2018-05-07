@@ -24,7 +24,7 @@ namespace System.Reactive
     /// <typeparam name="TTarget">Type of the resulting sequence's elements.</typeparam>
     /// <typeparam name="TSource"></typeparam>
     /// <remarks>Implementations of sinks are responsible to enforce the message grammar on the associated observer. Upon sending a terminal message, a pairing Dispose call should be made to trigger cancellation of related resources and to mute the outgoing observer.</remarks>
-    internal abstract class Sink<TTarget, TSource> : IObserver<TSource>, IDisposable
+    internal abstract class Sink<TSource, TTarget> : IObserver<TSource>, IDisposable
     {
         private IDisposable _cancel;
         private volatile IObserver<TTarget> _observer;
@@ -80,9 +80,9 @@ namespace System.Reactive
 
         private sealed class _ : IObserver<TTarget>
         {
-            private readonly Sink<TTarget, TSource> _forward;
+            private readonly Sink<TSource, TTarget> _forward;
 
-            public _(Sink<TTarget, TSource> forward)
+            public _(Sink<TSource, TTarget> forward)
             {
                 _forward = forward;
             }

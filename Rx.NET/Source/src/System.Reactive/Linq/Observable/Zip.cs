@@ -250,7 +250,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
 
-            internal sealed class _ : Sink<TResult, TFirst>
+            internal sealed class _ : Sink<TFirst, TResult> 
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 

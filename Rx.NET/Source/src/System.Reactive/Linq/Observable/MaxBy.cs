@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<IList<TSource>, TSource>
+        internal sealed class _ : Sink<TSource, IList<TSource>> 
         {
             private readonly MaxBy<TSource, TKey> _parent;
             private bool _hasValue;

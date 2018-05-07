@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IObservable<TSource> ,TSource>
+            internal sealed class _ : Sink<TSource, IObservable<TSource> > 
             {
                 private readonly Queue<ISubject<TSource>> _queue = new Queue<ISubject<TSource>>();
                 private readonly SingleAssignmentDisposable _m = new SingleAssignmentDisposable();
@@ -124,7 +124,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IObservable<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
                 private readonly object _gate = new object();
                 private readonly Queue<ISubject<TSource>> _q = new Queue<ISubject<TSource>>();
@@ -281,7 +281,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IObservable<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
                 private readonly object _gate = new object();
 
@@ -370,7 +370,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IObservable<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
                 private readonly object _gate = new object();
                 private readonly SerialDisposable _timerD = new SerialDisposable();
@@ -501,7 +501,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IObservable<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _windowGate = new AsyncLock();
@@ -642,7 +642,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IObservable<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
                 private readonly object _gate = new object();
 

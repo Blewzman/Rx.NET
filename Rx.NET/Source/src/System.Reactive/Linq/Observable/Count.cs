@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<int, TSource>
+            internal sealed class _ : Sink<TSource, int> 
             {
                 private int _count;
 
@@ -67,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<int, TSource>
+            internal sealed class _ : Sink<TSource, int> 
             {
                 private readonly Func<TSource, bool> _predicate;
                 private int _count;

@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<Notification<TSource>, TSource>
+        internal sealed class _ : Sink<TSource, Notification<TSource>> 
         {
             public _(IObserver<Notification<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)

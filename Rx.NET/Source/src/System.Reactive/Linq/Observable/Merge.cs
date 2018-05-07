@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource>>
+            internal sealed class _ : Sink<IObservable<TSource>, TSource> 
             {
                 private readonly int _maxConcurrent;
 
@@ -165,7 +165,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource>>
+            internal sealed class _ : Sink<IObservable<TSource>, TSource> 
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -288,7 +288,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, Task<TSource>>
+            internal sealed class _ : Sink<Task<TSource>, TSource> 
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)

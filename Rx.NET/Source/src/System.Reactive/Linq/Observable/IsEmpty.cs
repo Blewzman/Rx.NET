@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<bool, TSource>
+        internal sealed class _ : Sink<TSource, bool> 
         {
             public _(IObserver<bool> observer, IDisposable cancel)
                 : base(observer, cancel)

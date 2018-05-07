@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly Queue<IList<TSource>> _queue = new Queue<IList<TSource>>();
 
@@ -117,7 +117,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly TimeSpan _timeShift;
                 private readonly IScheduler _scheduler;
@@ -270,7 +270,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly object _gate = new object();
 
@@ -348,7 +348,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly Ferry _parent;
 
@@ -473,7 +473,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _bufferGate = new AsyncLock();
@@ -605,7 +605,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly object _gate = new object();
 

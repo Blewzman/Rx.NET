@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly int _count;
                 private Queue<TSource> _queue;
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>, TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly TimeSpan _duration;
                 private Queue<System.Reactive.TimeInterval<TSource>> _queue;

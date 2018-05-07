@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -191,7 +191,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -360,7 +360,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
@@ -446,7 +446,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
@@ -537,7 +537,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -684,7 +684,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -835,7 +835,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal class _ : Sink<TResult, TSource>
+            internal class _ : Sink<TSource, TResult> 
             {
                 protected readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -1069,7 +1069,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal class _ : Sink<TResult, TSource>
+            internal class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
                 private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
@@ -1310,7 +1310,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, IEnumerable<TResult>> _selector;
 
@@ -1392,7 +1392,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, int, IEnumerable<TResult>> _selector;
 
@@ -1476,7 +1476,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -1596,7 +1596,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TResult, TSource>
+            internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
