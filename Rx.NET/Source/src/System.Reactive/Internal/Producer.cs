@@ -177,18 +177,4 @@ namespace System.Reactive
 
         protected abstract TSink CreateSink(IObserver<TTarget> observer, IDisposable cancel);
     }
-
-    internal sealed class SubscriptionDisposable : ICancelable
-    {
-        public volatile IDisposable Sink;
-        public readonly SingleAssignmentDisposable Inner = new SingleAssignmentDisposable();
-
-        public bool IsDisposed => Sink == null;
-
-        public void Dispose()
-        {
-            Interlocked.Exchange(ref Sink, null)?.Dispose();
-            Inner.Dispose();
-        }
-    }
 }
