@@ -42,7 +42,7 @@ namespace System.Reactive.Concurrency
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly SynchronizationContext _context;
 

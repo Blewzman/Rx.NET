@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly TimeSpan _dueTime;
             private readonly IScheduler _scheduler;
@@ -128,7 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 

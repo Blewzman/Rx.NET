@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TValue> Eval() => _observableFactory();
 
-        internal sealed class _ : Sink<TValue>
+        internal sealed class _ : IdentitySink<TValue>
         {
             private readonly Func<IObservable<TValue>> _observableFactory;
 

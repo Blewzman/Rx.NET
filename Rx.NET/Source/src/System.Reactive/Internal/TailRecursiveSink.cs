@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive
 {
-    internal abstract class TailRecursiveSink<TSource> : Sink<TSource>
+    internal abstract class TailRecursiveSink<TSource> : IdentitySink<TSource>
     {
         public TailRecursiveSink(IObserver<TSource> observer, IDisposable cancel)
             : base(observer, cancel)

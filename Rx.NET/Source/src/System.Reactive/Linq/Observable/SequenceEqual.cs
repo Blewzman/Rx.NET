@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<bool>
+            internal sealed class _ : IdentitySink<bool>
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 

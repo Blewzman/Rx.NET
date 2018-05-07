@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal abstract class _ : Sink<TSource>
+        internal abstract class _ : IdentitySink<TSource>
         {
             protected readonly IComparer<TSource> _comparer;
 
@@ -152,7 +152,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double>
+        internal sealed class _ : IdentitySink<double>
         {
             private bool _hasValue;
             private double _lastValue;
@@ -208,7 +208,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float>
+        internal sealed class _ : IdentitySink<float>
         {
             private bool _hasValue;
             private float _lastValue;
@@ -264,7 +264,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal>
+        internal sealed class _ : IdentitySink<decimal>
         {
             private bool _hasValue;
             private decimal _lastValue;
@@ -320,7 +320,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<int>
+        internal sealed class _ : IdentitySink<int>
         {
             private bool _hasValue;
             private int _lastValue;
@@ -376,7 +376,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<long>
+        internal sealed class _ : IdentitySink<long>
         {
             private bool _hasValue;
             private long _lastValue;
@@ -432,7 +432,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?>
+        internal sealed class _ : IdentitySink<double?>
         {
             private double? _lastValue;
 
@@ -481,7 +481,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float?>
+        internal sealed class _ : IdentitySink<float?>
         {
             private float? _lastValue;
 
@@ -530,7 +530,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal?>
+        internal sealed class _ : IdentitySink<decimal?>
         {
             private decimal? _lastValue;
 
@@ -579,7 +579,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<int?>
+        internal sealed class _ : IdentitySink<int?>
         {
             private int? _lastValue;
 
@@ -628,7 +628,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<long?>
+        internal sealed class _ : IdentitySink<long?>
         {
             private long? _lastValue;
 

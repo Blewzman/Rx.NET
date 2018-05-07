@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
 
-        internal sealed class _ : Sink<int>
+        internal sealed class _ : IdentitySink<int>
         {
             private readonly int _start;
             private readonly int _count;

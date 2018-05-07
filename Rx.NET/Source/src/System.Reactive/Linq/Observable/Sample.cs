@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly object _gate = new object();
 
@@ -146,7 +146,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private object _gate = new object();
 

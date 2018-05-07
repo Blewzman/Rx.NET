@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double>
+        internal sealed class _ : IdentitySink<double>
         {
             private double _sum;
             private long _count;
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float>
+        internal sealed class _ : IdentitySink<float>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -129,7 +129,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal>
+        internal sealed class _ : IdentitySink<decimal>
         {
             private decimal _sum;
             private long _count;
@@ -297,7 +297,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?>
+        internal sealed class _ : IdentitySink<double?>
         {
             private double _sum;
             private long _count;
@@ -357,7 +357,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float?>
+        internal sealed class _ : IdentitySink<float?>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -417,7 +417,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal?>
+        internal sealed class _ : IdentitySink<decimal?>
         {
             private decimal _sum;
             private long _count;

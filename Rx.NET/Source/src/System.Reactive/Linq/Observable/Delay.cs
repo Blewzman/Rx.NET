@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            internal abstract class _ : Sink<TSource>
+            internal abstract class _ : IdentitySink<TSource>
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -602,7 +602,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
             }
 
-            internal abstract class _ : Sink<TSource>
+            internal abstract class _ : IdentitySink<TSource>
             {
                 private readonly CompositeDisposable _delays = new CompositeDisposable();
                 private object _gate = new object();

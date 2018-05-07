@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Action<TSource> _onNext;
 
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly IObserver<TSource> _doObserver;
 
@@ -139,7 +139,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 

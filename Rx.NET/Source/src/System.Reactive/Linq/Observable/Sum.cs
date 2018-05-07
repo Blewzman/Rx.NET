@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double>
+        internal sealed class _ : IdentitySink<double>
         {
             private double _sum;
 
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float>
+        internal sealed class _ : IdentitySink<float>
         {
             private double _sum; // This is what LINQ to Objects does!
 
@@ -89,7 +89,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal>
+        internal sealed class _ : IdentitySink<decimal>
         {
             private decimal _sum;
 
@@ -125,7 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<int>
+        internal sealed class _ : IdentitySink<int>
         {
             private int _sum;
 
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<long>
+        internal sealed class _ : IdentitySink<long>
         {
             private long _sum;
 
@@ -217,7 +217,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?>
+        internal sealed class _ : IdentitySink<double?>
         {
             private double _sum;
 
@@ -254,7 +254,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float?>
+        internal sealed class _ : IdentitySink<float?>
         {
             private double _sum; // This is what LINQ to Objects does!
 
@@ -291,7 +291,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal?>
+        internal sealed class _ : IdentitySink<decimal?>
         {
             private decimal _sum;
 
@@ -328,7 +328,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<int?>
+        internal sealed class _ : IdentitySink<int?>
         {
             private int _sum;
 
@@ -375,7 +375,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<long?>
+        internal sealed class _ : IdentitySink<long?>
         {
             private long _sum;
 

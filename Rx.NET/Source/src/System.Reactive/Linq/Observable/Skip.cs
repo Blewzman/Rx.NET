@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private int _remaining;
 
@@ -90,7 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private volatile bool _open;
 

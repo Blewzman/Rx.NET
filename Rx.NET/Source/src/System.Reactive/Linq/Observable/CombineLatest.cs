@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
@@ -224,7 +224,7 @@ namespace System.Reactive.Linq.ObservableImpl
         void Done(int index);
     }
 
-    internal abstract class CombineLatestSink<TResult> : Sink<TResult>, ICombineLatest
+    internal abstract class CombineLatestSink<TResult> : IdentitySink<TResult>, ICombineLatest
     {
         protected readonly object _gate;
 
@@ -393,7 +393,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_sources);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Func<IList<TSource>, TResult> _resultSelector;
 

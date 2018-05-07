@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
-            internal sealed class _ : Sink<long>
+            internal sealed class _ : IdentitySink<long>
             {
                 public _(IObserver<long> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -115,7 +115,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
-            internal sealed class _ : Sink<long>
+            internal sealed class _ : IdentitySink<long>
             {
                 private readonly TimeSpan _period;
 

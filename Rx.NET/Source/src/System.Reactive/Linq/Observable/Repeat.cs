@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 

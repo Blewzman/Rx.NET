@@ -1,23 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
-// See the LICENSE file in the project root for more information. 
-
-using System.Threading;
+﻿using System.Threading;
 
 namespace System.Reactive
 {
-    internal abstract class Sink<T> : Sink<T, T>
-    {
-        protected Sink(IObserver<T> observer, IDisposable cancel) : base(observer, cancel)
-        {
-        }
-
-        public override void OnNext(T value)
-        {
-            base.ForwardOnNext(value);
-        }
-    }
-
     /// <summary>
     /// Base class for implementation of query operators, providing a lightweight sink that can be disposed to mute the outgoing observer.
     /// </summary>

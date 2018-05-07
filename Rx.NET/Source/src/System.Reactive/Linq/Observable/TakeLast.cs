@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -126,7 +126,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 

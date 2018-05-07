@@ -65,7 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, TSource, TSource> _accumulator;
             private TSource _accumulation;
