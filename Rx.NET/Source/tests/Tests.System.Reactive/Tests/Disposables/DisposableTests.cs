@@ -120,7 +120,123 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<InvalidOperationException>(() => { d.Disposable = Disposable.Empty; });
         }
+        
+        [Fact]
+        public void BinarySingleAssignmentDisposable_SetNull1()
+        {
+            var d = new BinarySingleAssignmentDisposable();
+            d.Disposable1 = null;
+        }
 
+        [Fact]
+        public void BinarySingleAssignmentDisposable_SetNull2()
+        {
+            var d = new BinarySingleAssignmentDisposable();
+            d.Disposable2 = null;
+        }
+
+        [Fact]
+        public void BinarySingleAssignmentDisposable_DisposeAfterSet1()
+        {
+            var disposed = false;
+
+            var d = new BinarySingleAssignmentDisposable();
+            var dd = Disposable.Create(() => { disposed = true; });
+            d.Disposable1 = dd;
+
+            Assert.Same(dd, d.Disposable1);
+
+            Assert.False(disposed);
+            d.Dispose();
+            Assert.True(disposed);
+            d.Dispose();
+            Assert.True(disposed);
+
+            Assert.True(d.IsDisposed);
+        }
+
+        [Fact]
+        public void BinarySingleAssignmentDisposable_DisposeAfterSet2()
+        {
+            var disposed = false;
+
+            var d = new BinarySingleAssignmentDisposable();
+            var dd = Disposable.Create(() => { disposed = true; });
+            d.Disposable2 = dd;
+
+            Assert.Same(dd, d.Disposable2);
+
+            Assert.False(disposed);
+            d.Dispose();
+            Assert.True(disposed);
+            d.Dispose();
+            Assert.True(disposed);
+
+            Assert.True(d.IsDisposed);
+        }
+
+        [Fact]
+        public void BinarySingleAssignmentDisposable_DisposeBeforeSet1()
+        {
+            var disposed = false;
+
+            var d = new BinarySingleAssignmentDisposable();
+            var dd = Disposable.Create(() => { disposed = true; });
+
+            Assert.False(disposed);
+            d.Dispose();
+            Assert.False(disposed);
+            Assert.True(d.IsDisposed);
+
+            d.Disposable1 = dd;
+            Assert.True(disposed);
+            //Assert.Null(d.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            d.Disposable1.Dispose();        // This should be a nop.
+
+            d.Dispose();
+            Assert.True(disposed);
+        }
+
+        [Fact]
+        public void BinarySingleAssignmentDisposable_DisposeBeforeSet2()
+        {
+            var disposed = false;
+
+            var d = new BinarySingleAssignmentDisposable();
+            var dd = Disposable.Create(() => { disposed = true; });
+
+            Assert.False(disposed);
+            d.Dispose();
+            Assert.False(disposed);
+            Assert.True(d.IsDisposed);
+
+            d.Disposable2 = dd;
+            Assert.True(disposed);
+            //Assert.Null(d.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            d.Disposable2.Dispose();        // This should be a nop.
+
+            d.Dispose();
+            Assert.True(disposed);
+        }
+
+        [Fact]
+        public void BinarySingleAssignmentDisposable_SetMultipleTimes1()
+        {
+            var d = new BinarySingleAssignmentDisposable();
+            d.Disposable1 = Disposable.Empty;
+
+            ReactiveAssert.Throws<InvalidOperationException>(() => { d.Disposable1 = Disposable.Empty; });
+        }
+
+        [Fact]
+        public void BinarySingleAssignmentDisposable_SetMultipleTimes2()
+        {
+            var d = new BinarySingleAssignmentDisposable();
+            d.Disposable2 = Disposable.Empty;
+
+            ReactiveAssert.Throws<InvalidOperationException>(() => { d.Disposable2 = Disposable.Empty; });
+        }
+        
         [Fact]
         public void CompositeDisposable_ArgumentChecking()
         {
