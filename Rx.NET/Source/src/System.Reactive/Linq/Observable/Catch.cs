@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnError(Exception error)
             {
                 _lastException = error;
-                _recurse();
+                Recurse();
             }
 
             protected override void Done()

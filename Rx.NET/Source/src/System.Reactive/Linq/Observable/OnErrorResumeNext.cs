@@ -36,12 +36,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                _recurse();
+                Recurse();
             }
 
             public override void OnCompleted()
             {
-                _recurse();
+                Recurse();
             }
 
             protected override bool Fail(Exception error)

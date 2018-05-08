@@ -51,8 +51,8 @@ namespace System.Reactive
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { subscription = subscription, observer = observer };
-                CurrentThreadScheduler.Instance.Schedule(state, Run);
+                var state = new State { parent = this, subscription = subscription, observer = observer };
+                CurrentThreadScheduler.Instance.Schedule(state, RunRun);
             }
             else
             {
@@ -64,15 +64,16 @@ namespace System.Reactive
 
         private struct State
         {
+            public BasicProducer<TSource> parent;
             public SingleAssignmentDisposable subscription;
             public IObserver<TSource> observer;
         }
 
-        private IDisposable Run(IScheduler _, State x)
+        static readonly Func<IScheduler, State, IDisposable> RunRun = (_, x) =>
         {
-            x.subscription.Disposable = Run(x.observer);
+            x.subscription.Disposable = x.parent.Run(x.observer);
             return Disposable.Empty;
-        }
+        };
 
         /// <summary>
         /// Core implementation of the query operator, called upon a new subscription to the producer object.
@@ -144,9 +145,9 @@ namespace System.Reactive
             
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { sink = sink, inner = runDisposable };
+                var state = new State { parent = this, sink = sink, inner = runDisposable };
 
-                CurrentThreadScheduler.Instance.Schedule(state, Run);
+                CurrentThreadScheduler.Instance.Schedule(state, RunRun);
             }
             else
             {
@@ -159,15 +160,16 @@ namespace System.Reactive
 
         private struct State
         {
+            public Producer<TTarget, TSink> parent;
             public TSink sink;
             public SingleAssignmentDisposable inner;
         }
 
-        private IDisposable Run(IScheduler _, State x)
+        static readonly Func<IScheduler, State, IDisposable> RunRun = (_, x) =>
         {
-            x.inner.Disposable = Run(x.sink);
+            x.inner.Disposable = x.parent.Run(x.sink);
             return Disposable.Empty;
-        }
+        };
 
         /// <summary>
         /// Core implementation of the query operator, called upon a new subscription to the producer object.
