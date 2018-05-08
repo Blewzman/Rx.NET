@@ -9,7 +9,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         protected IDisposable Get(ref IDisposable fieldRef)
         {
-            var current = fieldRef;
+            var current = Volatile.Read(ref fieldRef);
 
             if (current == BooleanDisposable.True)
             {
@@ -40,7 +40,7 @@ namespace System.Reactive.Disposables
             // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
             // to the outside world (see the Disposable property getter), so no-one can ever assign
             // this value to us manually.
-            return fieldRef == BooleanDisposable.True;
+            return Volatile.Read(ref fieldRef) == BooleanDisposable.True;
         }
 
         protected void Dispose(ref IDisposable fieldRef)

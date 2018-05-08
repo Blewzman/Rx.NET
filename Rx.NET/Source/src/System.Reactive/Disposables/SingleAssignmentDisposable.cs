@@ -10,7 +10,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class SingleAssignmentDisposable : AssignmentDisposable, ICancelable
     {
-        private volatile IDisposable _current;
+        private IDisposable _current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleAssignmentDisposable"/> class.

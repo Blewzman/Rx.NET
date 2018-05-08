@@ -6,8 +6,8 @@
     /// </summary>
     public sealed class BinarySingleAssignmentDisposable : AssignmentDisposable, ICancelable
     {
-        private volatile IDisposable _current1;
-        private volatile IDisposable _current2;
+        private IDisposable _current1;
+        private IDisposable _current2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BinarySingleAssignmentDisposable"/> class.
