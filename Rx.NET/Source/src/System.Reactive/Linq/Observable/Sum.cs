@@ -60,25 +60,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : IdentitySink<float>
+        internal sealed class _ : SumSink<float>
         {
-            private double _sum; // This is what LINQ to Objects does!
-
             public _(IObserver<float> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _sum = 0.0; // This is what LINQ to Objects does!
             }
 
             public override void OnNext(float value)
             {
                 _sum += value; // This is what LINQ to Objects does!
-            }
-
-            public override void OnCompleted()
-            {
-                base.ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
-                base.ForwardOnCompleted();
             }
         }
     }
@@ -244,7 +235,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                base.ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
+                base.ForwardOnNext((float) _sum); // This is what LINQ to Objects does!
                 base.ForwardOnCompleted();
             }
         }

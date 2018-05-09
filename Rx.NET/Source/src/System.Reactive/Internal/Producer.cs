@@ -141,7 +141,7 @@ namespace System.Reactive
                 if (!sinkIsInternal)
                     safeObserverDisposable.Disposable2 = runDisposable;
             }
-            
+
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
                 var state = new State { sink = sink, inner = runDisposable };
