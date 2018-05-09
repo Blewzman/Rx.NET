@@ -69,11 +69,11 @@ namespace System.Reactive
             public IObserver<TSource> observer;
         }
 
-        static readonly Func<IScheduler, State, IDisposable> RunRun = (_, x) =>
+        static IDisposable RunRun(IScheduler _, State x)
         {
             x.subscription.Disposable = x.parent.Run(x.observer);
             return Disposable.Empty;
-        };
+        }
 
         /// <summary>
         /// Core implementation of the query operator, called upon a new subscription to the producer object.
@@ -165,11 +165,11 @@ namespace System.Reactive
             public SingleAssignmentDisposable inner;
         }
 
-        static readonly Func<IScheduler, State, IDisposable> RunRun = (_, x) =>
+        static IDisposable RunRun(IScheduler _, State x)
         {
             x.inner.Disposable = x.parent.Run(x.sink);
             return Disposable.Empty;
-        };
+        }
 
         /// <summary>
         /// Core implementation of the query operator, called upon a new subscription to the producer object.
